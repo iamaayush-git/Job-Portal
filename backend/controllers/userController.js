@@ -132,13 +132,15 @@ const updateProfile = async (req, res) => {
 
     const skillsArray = skills ? skills.split(',').map(skill => skill.trim()) : undefined
 
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const updatedUser = await User.findByIdAndUpdate(userId, {
       fullname,
       email,
       phoneNumber,
-      bio,
-      skills: skillsArray,
+      profile: {
+        bio,
+        skills: skillsArray,
+      },
     }, { new: true })
 
     if (!updatedUser) {
@@ -151,8 +153,8 @@ const updateProfile = async (req, res) => {
       fullname: updatedUser.fullname,
       email: updatedUser.email,
       phoneNumber: updatedUser.phoneNumber,
-      bio: updatedUser.bio,
-      skills: updatedUser.skills,
+      bio: updatedUser.profile.bio,
+      skills: updatedUser.profile.skills,
     }
 
     res.status(200).json({

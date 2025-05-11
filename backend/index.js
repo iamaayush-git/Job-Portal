@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
 import connectMongodb from "./utils/db.js";
+import userRouter from "./routes/userRouter.js";
 
 const app = express();
 dotenv.config();
@@ -22,6 +23,8 @@ app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.status(200).send("API working")
 })
+
+app.use("/api/v1/user", userRouter)
 
 
 const port = process.env.PORT || 4000;
