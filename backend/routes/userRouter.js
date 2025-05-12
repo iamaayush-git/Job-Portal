@@ -1,11 +1,12 @@
 import express from "express"
-import { login, registerUser, updateProfile } from "../controllers/userController.js";
-import isAuthentiate from "../middlewares/isAuthenticate.js";
+import { login, logout, registerUser, updateProfile } from "../controllers/userController.js";
+import isAuthenticate from "../middlewares/isAuthenticate.js";
 
 const userRouter = express.Router();
 
 userRouter.post("/register", registerUser)
 userRouter.post("/login", login);
-userRouter.post("/profile/update", isAuthentiate, updateProfile)
+userRouter.get("/logout", logout)
+userRouter.post("/profile/update", isAuthenticate, updateProfile)
 
 export default userRouter;

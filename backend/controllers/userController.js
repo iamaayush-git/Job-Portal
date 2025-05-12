@@ -105,7 +105,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    return res.status(200).cookie(token, "").json({
+    return res.status(200).cookie("token", "").json({
       success: true,
       message: "Logout successfully",
     })
@@ -123,12 +123,7 @@ const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills, } = req.body;
     const file = req.file;
-    if (!fullname || !phoneNumber || !email || !bio || !skills) {
-      return res.status(400).json({
-        message: "All fields are required",
-        success: false,
-      })
-    }
+    // cloudinary here
 
     const skillsArray = skills ? skills.split(',').map(skill => skill.trim()) : undefined
 

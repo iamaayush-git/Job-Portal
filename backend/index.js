@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import cookieParser from "cookie-parser";
 import connectMongodb from "./utils/db.js";
 import userRouter from "./routes/userRouter.js";
+import companyRouter from "./routes/companyRouter.js";
 
 const app = express();
 dotenv.config();
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/api/v1/user", userRouter)
+app.use("/api/v1/company", companyRouter)
 
 
 const port = process.env.PORT || 4000;

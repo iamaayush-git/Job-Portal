@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-const isAuthentiate = (req, res, next) => {
+const isAuthenticate = (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
@@ -30,4 +30,4 @@ const isAuthentiate = (req, res, next) => {
   }
 }
 
-export default isAuthentiate;
+export default isAuthenticate;
