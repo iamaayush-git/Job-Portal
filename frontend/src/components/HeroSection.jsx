@@ -3,7 +3,7 @@ import { CiSearch } from "react-icons/ci";
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-r from-blue-50 to-white pt-10 mt-5 rounded-md">
+    <section className="py-10 rounded-md">
       <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
         <div className="flex-1 text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">

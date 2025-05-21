@@ -22,9 +22,9 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 justify-center items-center">
-            <a href="#home" className="text-gray-700 hover:text-blue-500">Home</a>
-            <a href="#about" className="text-gray-700 hover:text-blue-500">Jobs</a>
-            <a href="#services" className="text-gray-700 hover:text-blue-500">Browse</a>
+            <Link to={"/"} className="text-gray-700 hover:text-blue-500">Home</Link>
+            <Link to={"/jobs"} className="text-gray-700 hover:text-blue-500">Jobs</Link>
+            <Link to={"/services"} className="text-gray-700 hover:text-blue-500">Browse</Link>
             {user ? (<div className='relative group' href="#">
               <img className='w-12 rounded-full cursor-pointer' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
               {/* user details */}
@@ -99,9 +99,9 @@ const Navbar = () => {
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div className="md:hidden bg-white px-4 pb-4 space-y-2 shadow-md">
-          <a href="#home" className="block text-gray-700 hover:text-blue-500">Home</a>
-          <a href="#about" className="block text-gray-700 hover:text-blue-500">Jobs</a>
-          <a href="#services" className="block text-gray-700 hover:text-blue-500">Browse</a>
+          <Link to={"/"} className="block text-gray-700 hover:text-blue-500">Home</Link>
+          <Link to={"/jobs"} className="block text-gray-700 hover:text-blue-500">Jobs</Link>
+          <Link to={"/services"} className="block text-gray-700 hover:text-blue-500">Browse</Link>
         </div>
       )}
     </nav>
