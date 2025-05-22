@@ -1,4 +1,3 @@
-// src/components/JobCard.jsx
 import React from 'react';
 
 const LatestJobCard = ({

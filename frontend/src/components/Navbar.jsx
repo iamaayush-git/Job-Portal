@@ -4,12 +4,14 @@ import { IoIosLogOut } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 import { ToastContainer } from "react-toastify"
+import { useSelector } from 'react-redux';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false)
+  const { user } = useSelector(state => state.auth);
 
   // temp varaibles
-  const user = false;
+  // const user = false;
 
 
   return (
@@ -28,19 +30,19 @@ const Navbar = () => {
             {user ? (<div className='relative group' href="#">
               <img className='w-12 rounded-full cursor-pointer' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
               {/* user details */}
-              <div className='group-hover:opacity-100 duration-300 absolute -bottom-37 right-10 opacity-0'>
+              <div className='bg-blue-50 w-[25vw] p-5 rounded-md group-hover:opacity-100 duration-300 absolute -bottom-40 right-10 opacity-0'>
                 <div className='space-y-2'>
                   <div className='flex items-center gap-5'>
                     <img className='w-12 rounded-full cursor-pointer' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
                     <div>
-                      <p className='text-nowrap'>Aayush Bhattarai</p>
-                      <p className='text-nowrap'>Lorem ipsum dolor sit amet.</p>
+                      <p className='text-lg text-nowrap'>Aayush Bhattarai</p>
+                      <p className='text-sm'>Lorem ipsum dolor sit amet.</p>
                     </div>
                   </div>
                   <div className='space-y-2'>
                     <div className='flex items-center gap-4'>
                       <CiUser size={30} />
-                      <p className='cursor-pointer font-light hover:text-blue-500'>View Profile</p>
+                      <Link to={"/profile"}><p className='cursor-pointer font-light hover:text-blue-500'>View Profile</p></Link>
                     </div>
                     <div className='flex items-center gap-4'>
                       <IoIosLogOut size={30} />
@@ -69,13 +71,13 @@ const Navbar = () => {
               <img onClick={() => setShowUserDetails(prev => !prev)} className='w-10 rounded-full cursor-pointer' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
 
               {/* hidden */}
-              {showUserDetails && <div className='duration-300 absolute -bottom-37 right-10'>
+              {showUserDetails && <div className='bg-blue-50 p-2 w-[80vw] rounded-md duration-300 absolute -bottom-37 right-10'>
                 <div className='space-y-2'>
                   <div className='flex items-center gap-5'>
                     <img className='w-10 rounded-full cursor-pointer ' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
                     <div className='text-md'>
-                      <p className='text-nowrap'>Aayush Bhattarai</p>
-                      <p className='text-nowrap'>Lorem ipsum dolor sit amet.</p>
+                      <p className='text-lg text-nowrap'>Aayush Bhattarai</p>
+                      <p className='text-sm'>Lorem ipsum dolor sit amet.</p>
                     </div>
                   </div>
                   <div className='space-y-2 text-md'>

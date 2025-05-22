@@ -20,24 +20,24 @@ const JobCard = () => {
         <span className="text-sm text-gray-500">{jobs.country}</span>
       </div>
 
-      <h2 className="text-xl font-bold text-gray-800 mb-2">{jobs.title}</h2>
+      <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2">{jobs.title}</h2>
 
-      <p className="text-gray-600 mb-4">{jobs.description}</p>
+      <p className="text-sm text-gray-600 mb-4">{jobs.description}</p>
 
       <div className="grid grid-cols-3 gap-2">
-        <span className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
+        <span className="flex items-center justify-center px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
           {jobs.position}
         </span>
-        <span className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
+        <span className="flex items-center justify-center px-2 py-1 text-sm bg-green-100 text-green-800 rounded-full">
           {jobs.type}
         </span>
-        <span className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">
+        <span className="flex items-center justify-center px-2 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">
           {jobs.salary}
         </span>
       </div>
       <div className='flex items-center justify-center gap-10 mt-5'>
-        <button className='border cursor-pointer px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white duration-150 '>Details</button>
-        <button className='border cursor-pointer px-3 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 duration-150 '>Save for Later</button>
+        <button className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md hover:bg-blue-500 hover:text-white duration-150 '>Details</button>
+        <button className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 duration-150 '>Save for Later</button>
       </div>
     </div>
   )

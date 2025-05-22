@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { setLoading } from '../../redux/slices/loadingSlice';
+import { setUser } from "../../redux/slices/authSlice"
 
 const Login = () => {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ const Login = () => {
       if (response.data.success === true) {
         toast.success(response.data.message);
         dispatch(setLoading(false))
+        dispatch(setUser(response.data.user))
         navigate('/')
       }
 
