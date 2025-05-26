@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './components/Navbar.jsx'
 import { Routes, Route } from "react-router-dom"
 import Home from './pages/Home.jsx'
@@ -7,9 +7,49 @@ import Signup from './pages/Signup.jsx'
 import Jobs from './pages/Jobs.jsx'
 import Browse from './pages/Browse.jsx'
 import Profile from './pages/Profile.jsx'
+import { useDispatch } from 'react-redux'
+import { setJobs } from "../redux/slices/jobsSlice.js"
+import { toast } from 'react-toastify'
+import axios from 'axios'
+import { setUser } from '../redux/slices/authSlice.js'
 
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getAllJobs();
+    isLoggedIn();
+  }, [])
+
+  const isLoggedIn = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth", {
+        withCredentials: true
+      })
+
+      if (response.data.success === true) {
+        localStorage.setItem('isLoggedIn', 'true');
+        dispatch(setUser(response.data.user));
+      }
+
+    } catch (error) {
+      console.log(error)
+      localStorage.setItem('isLoggedIn', false);
+    }
+  }
+
+  const getAllJobs = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-all-jobs");
+      if (response.data.success === true) {
+        dispatch(setJobs(response?.data.jobs))
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data.message)
+    }
+  }
   return (
     <>
       <Navbar />

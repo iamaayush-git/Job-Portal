@@ -2,18 +2,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import AppliedJobs from '../components/AppliedJobs';
+import EditAccountModal from '../components/EditAccountModal';
 
 const Profile = () => {
-  // const user = {
-  //   name: 'John Doe',
-  //   email: 'johndoe@example.com',
-  //   phone: '+977-9876543210',
-  //   country: 'Nepal',
-  //   about: 'Passionate web developer with expertise in React.js and Node.js. Always eager to learn new technologies.',
-  //   image: 'https://via.placeholder.com/150', // Replace with actual image URL or local asset
-  // };
-
   const skills = ["Frontend", "backend", "Fullstack", "Mernstack"]
+
 
   const { user } = useSelector(state => state.auth);
 
@@ -22,7 +15,7 @@ const Profile = () => {
       <div className="mx-auto bg-white shadow-lg rounded-lg w-[50vw] p-6 sm:p-8">
         <div className="flex flex-col items-center">
           <img
-            src={"https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"}
+            src={user?.profile.photo}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover border-4 border-blue-500 shadow mb-4"
           />
@@ -49,7 +42,7 @@ const Profile = () => {
             <p className='text-gray-600 font-medium'>Skills:</p>
             <div className='flex flex-wrap items-center gap-3'>
               {skills.length > 0 ? skills.map((item, index) => {
-                return <div className='p-1 rounded-md text-slate-700 border'>{item}</div>
+                return <div key={index} className='p-1 rounded-md text-slate-700 border'>{item}</div>
               }) : "please add skills"}
             </div>
           </div>
@@ -60,7 +53,7 @@ const Profile = () => {
         </div>
 
         <div className="mt-6 text-center">
-          <button className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
+          <button className="cursor-pointer bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
             Edit Profile
           </button>
         </div>
@@ -68,6 +61,7 @@ const Profile = () => {
           <p className='text-xl font-semibold text-slate-700 mb-5'>Applied Jobs</p>
           <AppliedJobs />
         </div>
+        <EditAccountModal />
       </div>
     </div>
   );

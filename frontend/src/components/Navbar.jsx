@@ -28,14 +28,14 @@ const Navbar = () => {
             <Link to={"/jobs"} className="text-gray-700 hover:text-blue-500">Jobs</Link>
             <Link to={"/services"} className="text-gray-700 hover:text-blue-500">Browse</Link>
             {user ? (<div className='relative group' href="#">
-              <img className='w-12 rounded-full cursor-pointer' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+              <img className='w-12 rounded-full cursor-pointer' src={user.profile.photo} alt="" />
               {/* user details */}
               <div className='bg-blue-50 w-[25vw] p-5 rounded-md group-hover:opacity-100 duration-300 absolute -bottom-40 right-10 opacity-0'>
                 <div className='space-y-2'>
                   <div className='flex items-center gap-5'>
-                    <img className='w-12 rounded-full cursor-pointer' src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="" />
+                    <img className='w-12 rounded-full cursor-pointer' src={user.profile.photo} alt="" />
                     <div>
-                      <p className='text-lg text-nowrap'>Aayush Bhattarai</p>
+                      <p className='text-lg text-nowrap'>{user.fullname}</p>
                       <p className='text-sm'>Lorem ipsum dolor sit amet.</p>
                     </div>
                   </div>

@@ -16,6 +16,7 @@ const Login = () => {
     password: ""
   });
 
+  // const {user} = useSelector(state=>state.auth)
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -29,7 +30,8 @@ const Login = () => {
       const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/user/login", formData, {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        withCredentials: true
       });
 
       if (response.data.success === true) {
@@ -37,11 +39,12 @@ const Login = () => {
         dispatch(setLoading(false))
         dispatch(setUser(response.data.user))
         navigate('/')
+
       }
 
     } catch (error) {
       dispatch(setLoading(false))
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message);
     }
     finally {
       dispatch(setLoading(false))

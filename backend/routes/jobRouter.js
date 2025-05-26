@@ -5,7 +5,7 @@ import isAuthenticate from "../middlewares/isAuthenticate.js";
 const jobRouter = express.Router();
 
 jobRouter.post("/post-job", isAuthenticate, postJob);
-jobRouter.get("/get-all-jobs", isAuthenticate, getAllJobs);
+jobRouter.get("/get-all-jobs", getAllJobs);
 jobRouter.get("/get-job/:id", isAuthenticate, getJobById);
 jobRouter.get("/get-admin-jobs", isAuthenticate, getAdminJobs);
 

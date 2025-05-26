@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import JobCard from '../components/JobCard'
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 const Jobs = () => {
-  const jobs = [1, 2, 2, 2, 2, 2, 2, 2, 2];
+  const { jobs } = useSelector(state => state.job)
   const jobFilter = [
     {
       name: "Location",
@@ -17,7 +20,6 @@ const Jobs = () => {
       items: ["0-40k", "40-80k", "80-150k", "150-200k"]
     }
   ]
-
   const [filterDetails, setFilterDetails] = useState([])
 
   return (
@@ -42,7 +44,7 @@ const Jobs = () => {
       </div>
       <div className='overflow-y-scroll h-[90vh] md:flex-7 grid md:grid-cols-3 space-y-3'>
         {jobs.map((item, index) => {
-          return <JobCard key={index} />
+          return <JobCard company={item.company.name} location={item.location} title={item.title} description={item.description} position={item.position} jobType={item.jobType} salary={item.salary} key={index} />
         })}
 
       </div>

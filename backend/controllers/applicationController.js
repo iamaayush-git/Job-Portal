@@ -55,8 +55,11 @@ const getAppliedJobs = async (req, res) => {
     const userId = req.user.userId;
     const appliedJobs = await Application.find({ applicant: userId }).sort({ createdAt: -1 }).populate({
       path: 'job',
+      populate: {
+        path: 'company'
+      },
       options: { sort: { createdAt: -1 } }
-    });
+    })
 
     if (!appliedJobs) {
       return res.status(404).json({

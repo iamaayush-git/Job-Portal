@@ -171,4 +171,30 @@ const updateProfile = async (req, res) => {
   }
 }
 
-export { registerUser, login, logout, updateProfile }
+const checkAuth = async (req, res) => {
+  try {
+    console.log(req.user.userId)
+    if (!req.user) {
+      return res.staus(401).json({
+        success: false,
+        message: "Not authorized"
+      })
+    }
+
+    const user = await User.findById(req.user.userId).select("-password");
+    return res.status(200).json({
+      success: true,
+      message: "user",
+      user
+    })
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    })
+  }
+}
+
+export { registerUser, login, logout, updateProfile, checkAuth }
