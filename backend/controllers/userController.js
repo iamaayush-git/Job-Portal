@@ -1,13 +1,12 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import { cloudinary } from "../utils/cloudinary.js";
+import fs from 'fs'
 
 const registerUser = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
-
-    console.log(fullname, email, phoneNumber, password, role)
-
 
     if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
@@ -27,6 +26,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
+
       fullname,
       email,
       phoneNumber,
@@ -127,7 +127,21 @@ const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills, } = req.body;
     const file = req.file;
+
     // cloudinary here
+
+    let photoUrl = null
+    if (file) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: 'profile-photos'
+      })
+      photoUrl = result.secure_url;
+      // delete files from local storage
+      fs.unlinkSync(file.path)
+    }
+
+
+
 
     const skillsArray = skills ? skills.split(',').map(skill => skill.trim()) : undefined
 
@@ -139,6 +153,7 @@ const updateProfile = async (req, res) => {
       profile: {
         bio,
         skills: skillsArray,
+        photo: photoUrl
       },
     }, { new: true })
 

@@ -1,18 +1,23 @@
 // src/components/ProfilePage.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import AppliedJobs from '../components/AppliedJobs';
 import EditAccountModal from '../components/EditAccountModal';
 
 const Profile = () => {
   const skills = ["Frontend", "backend", "Fullstack", "Mernstack"]
+  const [editProfile, setEditProfile] = useState(false)
+
+  const showEditForm = (e) => {
+    setEditProfile(true)
+  }
 
 
   const { user } = useSelector(state => state.auth);
 
   return (
     <div className=" min-h-screen bg-gray-100 py-10 px-4 flex justify-center">
-      <div className="mx-auto bg-white shadow-lg rounded-lg w-[50vw] p-6 sm:p-8">
+      <div className="relative mx-auto bg-white shadow-lg rounded-lg w-[50vw] p-6 sm:p-8">
         <div className="flex flex-col items-center">
           <img
             src={user?.profile.photo}
@@ -53,7 +58,7 @@ const Profile = () => {
         </div>
 
         <div className="mt-6 text-center">
-          <button className="cursor-pointer bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
+          <button onClick={showEditForm} className="cursor-pointer bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
             Edit Profile
           </button>
         </div>
@@ -61,7 +66,7 @@ const Profile = () => {
           <p className='text-xl font-semibold text-slate-700 mb-5'>Applied Jobs</p>
           <AppliedJobs />
         </div>
-        <EditAccountModal />
+        <EditAccountModal editProfile={editProfile} setEditProfile={setEditProfile} />
       </div>
     </div>
   );

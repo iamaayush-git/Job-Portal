@@ -12,7 +12,6 @@ const AppliedJobs = () => {
       })
 
       if (response.data.success === true) {
-        console.log(response.data.appliedJobs)
         setAppliedJobs(response.data.appliedJobs)
       }
 
