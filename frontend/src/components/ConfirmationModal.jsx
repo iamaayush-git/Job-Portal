@@ -1,8 +1,13 @@
 // components/ConfirmationModal.jsx
 
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
 
 const ConfirmationModal = ({ showConfirmation, title, message, onCancel, onConfirm }) => {
+  const { loading } = useSelector(state => state.loading)
+
   if (!showConfirmation) return null;
 
   return (
@@ -17,12 +22,18 @@ const ConfirmationModal = ({ showConfirmation, title, message, onCancel, onConfi
           >
             Cancel
           </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Confirm
-          </button>
+          {
+            loading ? <button disabled
+              className="flex items-center justify-center gap-3 cursor-not-allowed px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Please wait <AiOutlineLoading3Quarters className='animate-spin' />
+            </button> : <button
+              onClick={onConfirm}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Confirm
+            </button>
+          }
         </div>
       </div>
     </div>

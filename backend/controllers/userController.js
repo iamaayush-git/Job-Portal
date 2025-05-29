@@ -125,7 +125,7 @@ const logout = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, bio, skills, } = req.body;
+    const { fullname, email, phoneNumber, bio, skills, photo } = req.body;
     const file = req.file;
 
     // cloudinary here
@@ -153,7 +153,7 @@ const updateProfile = async (req, res) => {
       profile: {
         bio,
         skills: skillsArray,
-        photo: photoUrl
+        photo: photoUrl || photo
       },
     }, { new: true })
 
@@ -167,9 +167,15 @@ const updateProfile = async (req, res) => {
       fullname: updatedUser.fullname,
       email: updatedUser.email,
       phoneNumber: updatedUser.phoneNumber,
-      bio: updatedUser.profile.bio,
-      skills: updatedUser.profile.skills,
+      role: updatedUser.role,
+      profile: {
+        bio: updatedUser.profile.bio,
+        skills: updatedUser.profile.skills,
+        photo: updatedUser.profile.photo
+      }
     }
+
+
 
     res.status(200).json({
       message: "Profiled updated successfully",
@@ -188,7 +194,6 @@ const updateProfile = async (req, res) => {
 
 const checkAuth = async (req, res) => {
   try {
-    console.log(req.user.userId)
     if (!req.user) {
       return res.staus(401).json({
         success: false,

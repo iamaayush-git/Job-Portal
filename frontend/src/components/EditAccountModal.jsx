@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ConfirmationModal from './ConfirmationModal'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from "react-router-dom"
+import { setUser } from '../../redux/slices/authSlice'
+import { setLoading } from "../../redux/slices/loadingSlice"
 
 const EditAccountModal = ({ editProfile, setEditProfile }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { user } = useSelector(state => state.auth)
   const [inputData, setInputData] = useState({})
@@ -24,16 +27,19 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
       skills: user?.profile.skills ? user.profile.skills : "",
       role: user?.profile.role ? user.profile.role : ""
     })
+    console.log(inputData)
   }, [user])
 
   const handleForm = (e) => {
-    setInputData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target;
+    setInputData(prev => ({ ...prev, [name]: value }));
   }
   const handleEditProfile = (e) => {
     e.preventDefault();
     setShowConfirmation(true)
   }
   const handleConfirm = async (e) => {
+    dispatch(setLoading(true));
     try {
       const formData = new FormData();
       formData.append('photo', inputData.photo);
@@ -51,6 +57,8 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
 
       if (response.data.success === true) {
         toast.success(response.data.message);
+        dispatch(setUser(response.data.user));
+        dispatch(setLoading(false))
         setShowConfirmation(false)
         setEditProfile(false)
         navigate("/profile")
@@ -58,6 +66,7 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
 
     } catch (error) {
       console.log(error)
+      dispatch(setLoading(false))
       toast.error(error.response?.data?.message)
     }
   }
@@ -78,10 +87,14 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
           <div className='absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50  z-50'>
             <div className=''>
               <h2 className='text-blue-500 font-semibold text-2xl'>Edit Account</h2>
-              <form className='border rounded-md shadow-xl p-5 flex flex-col gap-5 w-[28vw]' action="">
+              <form className='border rounded-md shadow-xl p-5 flex flex-col gap-5 w-[80vw] md:w-[30vw] ' action="">
                 <label htmlFor='profile' >
                   <img className='w-20 rounded-md mx-auto cursor-pointer' src={showTempPhoto} alt="img not found" />
-                  <input onChange={photoHandler} className='hidden' type="file" id='profile' />
+                  <input onChange={photoHandler} className='hidden' type="file" id='profile' name='photo' />
+                </label>
+                <label className='flex flex-col' htmlFor='resume' >
+                  <p className='font-semibold'>Add resume here: </p>
+                  <input onChange={photoHandler} className='font-light cursor-pointer' type="file" id='resume' />
                 </label>
                 <label className='w-full' htmlFor="name">
                   <p className='text-slate-800 font-semibold'>Name:</p>

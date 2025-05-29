@@ -5,7 +5,6 @@ import AppliedJobs from '../components/AppliedJobs';
 import EditAccountModal from '../components/EditAccountModal';
 
 const Profile = () => {
-  const skills = ["Frontend", "backend", "Fullstack", "Mernstack"]
   const [editProfile, setEditProfile] = useState(false)
 
   const showEditForm = (e) => {
@@ -17,7 +16,7 @@ const Profile = () => {
 
   return (
     <div className=" min-h-screen bg-gray-100 py-10 px-4 flex justify-center">
-      <div className="relative mx-auto bg-white shadow-lg rounded-lg w-[50vw] p-6 sm:p-8">
+      <div className="w-[90vw] relative mx-auto bg-white shadow-lg rounded-lg md:w-[50vw]  p-6 sm:p-8">
         <div className="flex flex-col items-center">
           <img
             src={user?.profile.photo}
@@ -46,7 +45,7 @@ const Profile = () => {
           <div>
             <p className='text-gray-600 font-medium'>Skills:</p>
             <div className='flex flex-wrap items-center gap-3'>
-              {skills.length > 0 ? skills.map((item, index) => {
+              {user?.profile?.skills.length > 0 ? user?.profile?.skills.map((item, index) => {
                 return <div key={index} className='p-1 rounded-md text-slate-700 border'>{item}</div>
               }) : "please add skills"}
             </div>
