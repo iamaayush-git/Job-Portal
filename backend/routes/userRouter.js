@@ -8,7 +8,7 @@ const userRouter = express.Router();
 userRouter.post("/register", upload.single("photo"), registerUser)
 userRouter.post("/login", login);
 userRouter.get("/logout", logout)
-userRouter.post("/profile/update", isAuthenticate, upload.single("photo"), updateProfile)
+userRouter.post("/profile/update", isAuthenticate, upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'resume', maxCount: 1 }]), updateProfile)
 userRouter.get("/check-auth", isAuthenticate, checkAuth)
 
 export default userRouter;

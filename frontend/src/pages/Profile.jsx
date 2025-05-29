@@ -40,7 +40,7 @@ const Profile = () => {
 
           <div>
             <label className="text-gray-600 font-medium">About:</label>
-            <p className="text-gray-700">{user?.about ? user.about : "please add your details."}</p>
+            <p className="text-gray-700">{user?.profile?.bio ? user.profile.bio : "please add your details."}</p>
           </div>
           <div>
             <p className='text-gray-600 font-medium'>Skills:</p>
@@ -52,7 +52,7 @@ const Profile = () => {
           </div>
           <div>
             <p className='text-gray-600 font-medium'>Resume: </p>
-            <p className='text-gray-700'>{user?.resume ? user.resume : "please add your resume"}</p>
+            {user?.profile?.resume ? < a target='_blank' href={user?.profile?.resume} className='text-blue-500'>show_resume</a> : <p>Add your resume</p>}
           </div>
         </div>
 
@@ -67,7 +67,7 @@ const Profile = () => {
         </div>
         <EditAccountModal editProfile={editProfile} setEditProfile={setEditProfile} />
       </div>
-    </div>
+    </div >
   );
 };
 

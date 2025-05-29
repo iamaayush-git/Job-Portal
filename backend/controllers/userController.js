@@ -125,19 +125,28 @@ const logout = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, bio, skills, photo } = req.body;
-    const file = req.file;
+    const { fullname, email, phoneNumber, bio, skills, photo, resume } = req.body;
+    const photoFile = req.files['photo']?.[0];
+    const resumeFile = req.files['resume']?.[0];
+
 
     // cloudinary here
-
     let photoUrl = null
-    if (file) {
-      const result = await cloudinary.uploader.upload(file.path, {
+    if (photoFile) {
+      const result = await cloudinary.uploader.upload(photoFile.path, {
         folder: 'profile-photos'
       })
       photoUrl = result.secure_url;
       // delete files from local storage
-      fs.unlinkSync(file.path)
+      fs.unlinkSync(photoFile.path)
+    }
+    let resumeUrl = null
+    if (resumeFile) {
+      const result = await cloudinary.uploader.upload(resumeFile.path, {
+        folder: 'resume'
+      })
+      resumeUrl = result.secure_url
+      fs.unlinkSync(resumeFile.path)
     }
 
 
@@ -153,7 +162,8 @@ const updateProfile = async (req, res) => {
       profile: {
         bio,
         skills: skillsArray,
-        photo: photoUrl || photo
+        photo: photoUrl || photo,
+        resume: resumeUrl || resume,
       },
     }, { new: true })
 
@@ -171,7 +181,8 @@ const updateProfile = async (req, res) => {
       profile: {
         bio: updatedUser.profile.bio,
         skills: updatedUser.profile.skills,
-        photo: updatedUser.profile.photo
+        photo: updatedUser.profile.photo,
+        resume: updatedUser.profile.resume,
       }
     }
 

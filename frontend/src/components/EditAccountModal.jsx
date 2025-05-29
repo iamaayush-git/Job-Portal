@@ -14,13 +14,21 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
   const { user } = useSelector(state => state.auth)
   const [inputData, setInputData] = useState({})
   const [showConfirmation, setShowConfirmation] = useState(false)
-  const [showTempPhoto, setShowTempPhoto] = useState("")
+  const [showTempFile, setShowTempFile] = useState({
+    photo: "",
+    resume: ""
+  })
 
 
   useEffect(() => {
-    setShowTempPhoto(user?.profile.photo)
+    setShowTempFile({
+      photo: user?.profile.photo,
+      resume: user?.profile.resume
+    })
     setInputData({
       photo: user?.profile.photo ? user.profile.photo : "",
+      bio: user?.profile.bio ? user.profile.bio : "",
+      resume: user?.profile.resume ? user.profile.resume : "",
       fullname: user?.fullname ? user.fullname : "",
       email: user?.email ? user.email : "",
       phoneNumber: user?.phoneNumber ? user.phoneNumber : "",
@@ -43,10 +51,12 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
     try {
       const formData = new FormData();
       formData.append('photo', inputData.photo);
+      formData.append('resume', inputData.resume);
       formData.append('fullname', inputData.fullname);
       formData.append('email', inputData.email);
       formData.append('phoneNumber', inputData.phoneNumber);
       formData.append('skills', inputData.skills);
+      formData.append('bio', inputData.bio);
 
       const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/user/profile/update", formData, {
         headers: {
@@ -71,12 +81,13 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
     }
   }
 
-  const photoHandler = (e) => {
+  const fileHandler = (e) => {
     const file = e.target.files[0];
+    console.log(file)
     if (file) {
-      const photoUrl = URL.createObjectURL(file);
-      setShowTempPhoto(photoUrl)
-      setInputData((prev) => ({ ...prev, photo: file }))
+      const fileUrl = URL.createObjectURL(file);
+      setShowTempFile((prev) => ({ ...prev, photo: fileUrl }))
+      setInputData((prev) => ({ ...prev, [e.target.name]: file }))
     }
   }
 
@@ -84,17 +95,18 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
     return editProfile ? (
       <>
         <div>
-          <div className='absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50  z-50'>
+          <div className='absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50  '>
             <div className=''>
               <h2 className='text-blue-500 font-semibold text-2xl'>Edit Account</h2>
               <form className='border rounded-md shadow-xl p-5 flex flex-col gap-5 w-[80vw] md:w-[30vw] ' action="">
                 <label htmlFor='profile' >
-                  <img className='w-20 rounded-md mx-auto cursor-pointer' src={showTempPhoto} alt="img not found" />
-                  <input onChange={photoHandler} className='hidden' type="file" id='profile' name='photo' />
+                  <img className='w-[15vw] rounded-md mx-auto cursor-pointer' src={showTempFile.photo} alt="img not found" />
+                  <input onChange={fileHandler} className='hidden' type="file" id='profile' name='photo' accept='image/*' />
                 </label>
-                <label className='flex flex-col' htmlFor='resume' >
-                  <p className='font-semibold'>Add resume here: </p>
-                  <input onChange={photoHandler} className='font-light cursor-pointer' type="file" id='resume' />
+                <label className='flex flex-col items-left' htmlFor='resume' >
+                  <p className='font-semibold'>Update resume: </p>
+                  {inputData.resume && <a className="text-blue-500" target='_blank' href={inputData.resume}>showresume</a>}
+                  <input onChange={fileHandler} className=' font-light cursor-pointer' type="file" id='resume' name='resume' accept='application/pdf' />
                 </label>
                 <label className='w-full' htmlFor="name">
                   <p className='text-slate-800 font-semibold'>Name:</p>
@@ -103,6 +115,12 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
                 <label htmlFor="email">
                   <p className='text-slate-800 font-semibold'>Email:</p>
                   <input value={inputData.email} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="email" id="email" />
+                </label>
+                <label htmlFor="email">
+                  <p className='text-slate-800 font-semibold'>Bio:</p>
+                  <textarea onChange={handleForm} className='border w-full outline-none rounded-md p-2' name="bio" id="">
+                    {inputData.bio}
+                  </textarea>
                 </label>
                 <label htmlFor="Phone">
                   <p className='text-slate-800 font-semibold'>Phone:</p>
