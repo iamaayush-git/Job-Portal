@@ -1,7 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const JobCard = ({ company, location, title, description, position, jobType, salary }) => {
+const JobCard = ({ _id, company, location, title, description, position, jobType, salary }) => {
 
+  const navigate = useNavigate();
   const jobs = {
     company: "TechFusion Inc.",
     country: "Nepal",
@@ -36,7 +38,7 @@ const JobCard = ({ company, location, title, description, position, jobType, sal
         </span>
       </div>
       <div className='flex items-center justify-center gap-10 mt-5'>
-        <button className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md hover:bg-blue-500 hover:text-white duration-150 '>Details</button>
+        <button onClick={() => navigate(`/job-details/${_id}`)} className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md hover:bg-blue-500 hover:text-white duration-150 '>Details</button>
         <button className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 duration-150 '>Save for Later</button>
       </div>
     </div>

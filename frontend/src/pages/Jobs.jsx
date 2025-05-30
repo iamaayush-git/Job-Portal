@@ -3,6 +3,7 @@ import JobCard from '../components/JobCard'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Jobs = () => {
   const { jobs } = useSelector(state => state.job)
@@ -44,7 +45,7 @@ const Jobs = () => {
       </div>
       <div className='overflow-y-scroll h-[90vh] md:flex-7 grid md:grid-cols-3 space-y-3'>
         {jobs.map((item, index) => {
-          return <JobCard company={item.company.name} location={item.location} title={item.title} description={item.description} position={item.position} jobType={item.jobType} salary={item.salary} key={index} />
+          return <JobCard _id={item._id} company={item.company.name} location={item.location} title={item.title} description={item.description} position={item.position} jobType={item.jobType} salary={item.salary} key={index} />
         })}
 
       </div>

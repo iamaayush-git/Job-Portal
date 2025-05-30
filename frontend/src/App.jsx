@@ -12,6 +12,7 @@ import { setJobs } from "../redux/slices/jobsSlice.js"
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { setUser } from '../redux/slices/authSlice.js'
+import JobDetails from './components/JobDetails.jsx'
 
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/jobs' element={<Jobs />} />
+          <Route path='/job-details/:id' element={<JobDetails />} />
           <Route path='/services' element={<Browse />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/login' element={<Login />} />
