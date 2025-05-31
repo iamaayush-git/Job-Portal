@@ -90,7 +90,7 @@ const login = async (req, res) => {
       email: user.email,
       phoneNumber: user.phoneNumber,
       role: user.role,
-      profile: user.profile
+      profile: user.profile,
     }
 
     res.status(200).cookie("token", token).json({

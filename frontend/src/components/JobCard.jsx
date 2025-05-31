@@ -1,19 +1,48 @@
+import axios from 'axios'
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { setJobs, setSavedJobs } from '../../redux/slices/jobsSlice'
+import { toast } from 'react-toastify'
 
 const JobCard = ({ _id, company, location, title, description, position, jobType, salary }) => {
+  const dispatch = useDispatch()
+  const { savedJobs } = useSelector(state => state.job)
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
-  const jobs = {
-    company: "TechFusion Inc.",
-    country: "Nepal",
-    title: "Frontend Developer",
-    description: "We are looking for a talented frontend developer proficient in React.js and Tailwind CSS.",
-    position: "Mid-Level",
-    type: "Full-Time",
-    salary: "Rs.120000"
+  const handleSave = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/save-job/" + _id, {
+        withCredentials: true
+      })
 
+      if (response.data.success === true) {
+        dispatch(setSavedJobs(response.data.savedJobs))
+        toast.success(response.data.message)
+      }
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
   }
+
+  const handleRemoveSave = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/remove-saved-job/" + _id, {
+        withCredentials: true
+      })
+      console.log(response)
+      if (response.data.success === true) {
+        dispatch(setSavedJobs(response.data.savedJobs))
+        toast.success(response.data.success)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
+  }
+
 
   return (
     <div className="w-[full] md:w-[26vw] mx-auto bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
@@ -39,7 +68,9 @@ const JobCard = ({ _id, company, location, title, description, position, jobType
       </div>
       <div className='flex items-center justify-center gap-10 mt-5'>
         <button onClick={() => navigate(`/job-details/${_id}`)} className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md hover:bg-blue-500 hover:text-white duration-150 '>Details</button>
-        <button className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 duration-150 '>Save for Later</button>
+        {
+          savedJobs.some(job => job._id === _id) ? <button onClick={() => handleRemoveSave()} className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 duration-150 '>Remove from save</button> : <button onClick={() => handleSave()} className='border cursor-pointer px-2 py-1 md:px-3 md:py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 duration-150 '>Save for Later</button>
+        }
       </div>
     </div>
   )

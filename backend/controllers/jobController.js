@@ -1,4 +1,5 @@
 import { Job } from "../models/jobModel.js";
+import { User } from "../models/userModel.js";
 
 const postJob = async (req, res) => {
   try {
@@ -92,7 +93,6 @@ const getJobById = async (req, res) => {
       message: "job",
       job
     })
-
   } catch (error) {
     console.log(error)
     res.status(500).json({
@@ -127,6 +127,138 @@ const getAdminJobs = async (req, res) => {
     })
   }
 }
+const saveJob = async (req, res) => {
+  try {
+    const { userId } = req.user
+    const jobId = req.params.id
+
+    let user = await User.findById(userId).populate('profile.savedJobs')
+    const job = await Job.findById(jobId)
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Jobs not found"
+      })
+    }
 
 
-export { postJob, getAllJobs, getJobById, getAdminJobs }
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    const isAlreadyApplied = user.profile.savedJobs.some(job => job._id.toString() === jobId)
+
+    if (isAlreadyApplied) {
+      return res.status(400).json({
+        success: false,
+        message: "Job already saved"
+      })
+    }
+
+
+    user.profile.savedJobs.push(job._id);
+    await user.save();
+
+    user = await User.findById(userId).populate({
+      path: 'profile.savedJobs',
+      populate: 'company'
+    })
+
+    return res.status(200).json({
+      success: true,
+      message: "Job saved successfully",
+      savedJobs: user.profile.savedJobs
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    })
+  }
+}
+
+const getSavedJobs = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const user = await User.findById(userId).populate({
+      path: 'profile.savedJobs',
+      populate: {
+        path: 'company'
+      }
+    })
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Saved jobs",
+      savedJobs: user.profile.savedJobs
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    })
+  }
+}
+
+const removeSavedJobs = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const jobId = req.params.id;
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Jobs not found"
+      })
+    }
+
+    const user = await User.findById(userId).populate({
+      path: 'profile.savedJobs',
+      populate: 'company'
+    });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    const savedJobs = user.profile.savedJobs.filter((job) => job._id.toString() !== jobId)
+    user.profile.savedJobs = savedJobs
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Jobs removed successfully",
+      savedJobs: user.profile.savedJobs
+    })
+
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    })
+  }
+}
+
+
+export { postJob, getAllJobs, getJobById, getAdminJobs, saveJob, removeSavedJobs, getSavedJobs }

@@ -57,6 +57,10 @@ const Navbar = () => {
                         <CiUser size={24} />
                         <span className="font-light">View Profile</span>
                       </Link>
+                      <Link to="/saved-jobs" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
+                        <img className='w-5' src="https://cdn-icons-png.flaticon.com/512/2956/2956783.png" alt="" />
+                        <span className="font-light">View saved jobs</span>
+                      </Link>
                       <div
                         className="flex items-center gap-3 hover:text-blue-500 cursor-pointer transition-colors"
                         onClick={handleLogout}

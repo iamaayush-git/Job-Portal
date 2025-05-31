@@ -3,16 +3,21 @@ import axios from "axios"
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useSelector } from 'react-redux';
-
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setSavedJobs } from '../../redux/slices/jobsSlice.js';
 
 const JobDetails = () => {
+  const dispatch = useDispatch()
   const { user } = useSelector(state => state.auth)
+  const { savedJobs } = useSelector(state => state.job)
+
+  const [hasApplied, setHasApplied] = useState(false);
+
   const { id } = useParams();
+
   const [job, setJob] = useState();
-  const handleJobDetails = async () => {
+
+  const getJob = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-job/" + id, {
         withCredentials: true
@@ -28,15 +33,60 @@ const JobDetails = () => {
   }
 
   useEffect(() => {
-    handleJobDetails();
+    getJob();
   }, [id])
 
-  useEffect(() => {
-    console.log(job)
-  }, [job])
+
 
   const handleAlreadyAppliedButton = () => {
     toast.error("Job already applied")
+  }
+
+  const handleJobApply = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/application/apply/" + id, {
+        withCredentials: true
+      });
+      if (response.data.success === true) {
+        setHasApplied(true)
+        toast.success(response.data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
+  }
+
+  const handleSaveJob = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/save-job/" + id, {
+        withCredentials: true
+      })
+      console.log(response)
+      if (response.data.success === true) {
+        dispatch(setSavedJobs(response.data.savedJobs))
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
+  }
+
+  const handleRemoveJob = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/remove-saved-job/" + id, {
+        withCredentials: true
+      })
+      if (response.data.success === true) {
+        dispatch(setSavedJobs(response.data.savedJobs))
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+    }
   }
 
 
@@ -60,6 +110,10 @@ const JobDetails = () => {
           <p>{job?.salary}</p>
         </div>
         <div>
+          <h2 className="font-semibold text-gray-900">Requirements</h2>
+          <div className='flex flex-wrap items-center gap-2'>{job?.requirements && job?.requirements.map((item, index) => <div className='px-3 py-2 bg-gray-300 text-sm rounded-md' key={index}> {item}  </div>)}</div>
+        </div>
+        <div>
           <h2 className="font-semibold text-gray-900">Experience</h2>
           <p>{job?.experienceLevel} yrs</p>
         </div>
@@ -81,15 +135,21 @@ const JobDetails = () => {
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
 
         {
-          job?.applications.some((item) => item?.applicant === user._id) ? <button onClick={handleAlreadyAppliedButton} className="cursor-pointer w-full sm:w-auto bg-gray-600 text-white font-medium py-2 px-6 rounded transition">
-            Apply Now
-          </button> : <button className="cursor-pointer w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition">
-            Apply Now
+          job?.applications.some((item) => item?.applicant === user._id) || hasApplied
+            ? <button onClick={handleAlreadyAppliedButton} className="cursor-pointer w-full sm:w-auto bg-gray-600 text-white font-medium py-2 px-6 rounded transition">
+              Apply Now
+            </button> : <button onClick={handleJobApply} className="cursor-pointer w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition">
+              Apply Now
+            </button>
+        }
+        {
+          savedJobs.some(job => job._id == id) ? <button onClick={handleRemoveJob} className="cursor-pointer w-full sm:w-auto bg-gray-100  hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded transition">
+            Remove Job
+          </button> : <button onClick={handleSaveJob} className="cursor-pointer w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded transition">
+            Save Job
           </button>
         }
-        <button className="cursor-pointer w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded transition">
-          Save Job
-        </button>
+
       </div>
     </div>
   ) : (<div className='gap-5 text-2xl font-medium flex items-center justify-center h-screen ' > Loading <AiOutlineLoading3Quarters size={50} className='animate-spin' />  </div>);

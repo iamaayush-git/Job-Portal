@@ -8,11 +8,12 @@ import Jobs from './pages/Jobs.jsx'
 import Browse from './pages/Browse.jsx'
 import Profile from './pages/Profile.jsx'
 import { useDispatch } from 'react-redux'
-import { setJobs } from "../redux/slices/jobsSlice.js"
+import { setJobs, setSavedJobs } from "../redux/slices/jobsSlice.js"
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { setUser } from '../redux/slices/authSlice.js'
 import JobDetails from './components/JobDetails.jsx'
+import SavedJobs from './pages/SavedJobs.jsx'
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
   useEffect(() => {
     getAllJobs();
     isLoggedIn();
+    getSavedJobs();
   }, [])
 
   const isLoggedIn = async () => {
@@ -51,6 +53,22 @@ const App = () => {
       toast.error(error.response?.data.message)
     }
   }
+
+  const getSavedJobs = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-saved-jobs", {
+        withCredentials: true
+      });
+      if (response.data.success === true) {
+        dispatch(setSavedJobs(response?.data.savedJobs))
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data.message)
+    }
+  }
+
+
   return (
     <>
       <Navbar />
@@ -59,6 +77,7 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/jobs' element={<Jobs />} />
           <Route path='/job-details/:id' element={<JobDetails />} />
+          <Route path='/saved-jobs' element={<SavedJobs />} />
           <Route path='/services' element={<Browse />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/login' element={<Login />} />
