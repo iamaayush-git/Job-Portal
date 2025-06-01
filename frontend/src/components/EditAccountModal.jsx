@@ -35,7 +35,6 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
       skills: user?.profile.skills ? user.profile.skills : "",
       role: user?.profile.role ? user.profile.role : ""
     })
-    console.log(inputData)
   }, [user])
 
   const handleForm = (e) => {

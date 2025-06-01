@@ -1,4 +1,3 @@
-// src/components/ProfilePage.jsx
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import AppliedJobs from '../components/AppliedJobs';

@@ -2,15 +2,29 @@ import React, { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { IoIosLogOut } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
-import { Link } from 'react-router-dom';
-import { ToastContainer } from "react-toastify"
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from "react-toastify"
+import { useDispatch, useSelector } from 'react-redux';
+import axios from "axios"
+import { removeUser } from '../../redux/slices/authSlice.js';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState(false)
   const { user } = useSelector(state => state.auth);
-  const handleLogout = () => {
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/logout", { withCredentials: true })
+      if (response.data.success === true) {
+        toast.success(response.data.message)
+        dispatch(removeUser())
+        navigate("/")
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
   }
 
   return (
@@ -25,7 +39,7 @@ const Navbar = () => {
           <div className="hidden md:flex space-x-6 justify-center items-center">
             <Link to={"/"} className="text-gray-700 hover:text-blue-500">Home</Link>
             <Link to={"/jobs"} className="text-gray-700 hover:text-blue-500">Jobs</Link>
-            <Link to={"/services"} className="text-gray-700 hover:text-blue-500">Browse</Link>
+            <Link to={"/about-us"} className="text-gray-700 hover:text-blue-500">About us</Link>
             {user ? (
               <div className="relative group w-fit">
                 {/* Profile Avatar */}
@@ -47,7 +61,7 @@ const Navbar = () => {
                       />
                       <div>
                         <p className="text-lg font-semibold truncate">{user.fullname}</p>
-                        <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet.</p>
+                        <p className="text-sm text-gray-500">{user.profile.bio}</p>
                       </div>
                     </div>
 

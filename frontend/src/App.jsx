@@ -7,32 +7,31 @@ import Signup from './pages/Signup.jsx'
 import Jobs from './pages/Jobs.jsx'
 import Browse from './pages/Browse.jsx'
 import Profile from './pages/Profile.jsx'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setJobs, setSavedJobs } from "../redux/slices/jobsSlice.js"
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { setUser } from '../redux/slices/authSlice.js'
 import JobDetails from './components/JobDetails.jsx'
 import SavedJobs from './pages/SavedJobs.jsx'
+import AboutUs from './pages/AboutUs.jsx'
 
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    checkAuth();
     getAllJobs();
-    isLoggedIn();
-    getSavedJobs();
   }, [])
 
-  const isLoggedIn = async () => {
+  const checkAuth = async () => {
     try {
-      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth", {
-        withCredentials: true
-      })
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth")
 
       if (response.data.success === true) {
         localStorage.setItem('isLoggedIn', 'true');
+        getSavedJobs();
         dispatch(setUser(response.data.user));
       }
 
@@ -78,7 +77,7 @@ const App = () => {
           <Route path='/jobs' element={<Jobs />} />
           <Route path='/job-details/:id' element={<JobDetails />} />
           <Route path='/saved-jobs' element={<SavedJobs />} />
-          <Route path='/services' element={<Browse />} />
+          <Route path='/about-us' element={<AboutUs />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />

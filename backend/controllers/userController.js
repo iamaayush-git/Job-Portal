@@ -206,7 +206,7 @@ const updateProfile = async (req, res) => {
 const checkAuth = async (req, res) => {
   try {
     if (!req.user) {
-      return res.staus(401).json({
+      return res.status(401).json({
         success: false,
         message: "Not authorized"
       })

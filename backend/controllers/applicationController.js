@@ -1,5 +1,6 @@
 import { Application } from "../models/applicationModel.js";
 import { Job } from "../models/jobModel.js";
+import { User } from "../models/userModel.js";
 
 const applyJob = async (req, res) => {
   try {
@@ -39,6 +40,50 @@ const applyJob = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Job applied successfully"
+    })
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    })
+  }
+}
+
+const cancelApplication = async (req, res) => {
+  try {
+    const applicationId = req.params.id;
+    const { userId } = req.user;
+
+    const application = await Application.findById(applicationId)
+
+    const isVerify = application.applicant.toString() === userId
+    if (!isVerify) {
+      return res.status(401).json({
+        success: false,
+        message: "You are not authorized to access this application."
+      })
+    }
+
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found"
+      })
+    }
+
+    await Job.updateMany(
+      { applications: applicationId },
+      { $pull: { applications: applicationId } }
+    )
+
+    await Application.findByIdAndDelete(applicationId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Application deleted successful"
     })
 
   } catch (error) {
@@ -152,4 +197,4 @@ const updateStatus = async (req, res) => {
 }
 
 
-export { applyJob, getAppliedJobs, getApplicants, updateStatus }
+export { applyJob, getAppliedJobs, getApplicants, updateStatus, cancelApplication }
