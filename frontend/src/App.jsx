@@ -5,9 +5,8 @@ import Home from './pages/Home.jsx'
 import Login from "./pages/Login.jsx"
 import Signup from './pages/Signup.jsx'
 import Jobs from './pages/Jobs.jsx'
-import Browse from './pages/Browse.jsx'
 import Profile from './pages/Profile.jsx'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setJobs, setSavedJobs } from "../redux/slices/jobsSlice.js"
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -27,8 +26,8 @@ const App = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth")
-
+      console.log("check auth")
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth", { withCredentials: true })
       if (response.data.success === true) {
         localStorage.setItem('isLoggedIn', 'true');
         getSavedJobs();
