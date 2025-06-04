@@ -6,12 +6,13 @@ import EditAccountModal from '../components/EditAccountModal';
 const Profile = () => {
   const [editProfile, setEditProfile] = useState(false)
 
-  const showEditForm = (e) => {
+  const showEditForm = () => {
     setEditProfile(true)
   }
 
 
   const { user } = useSelector(state => state.auth);
+
 
   return (
     <div className=" min-h-screen bg-gray-100 py-10 px-4 flex justify-center">
@@ -60,10 +61,13 @@ const Profile = () => {
             Edit Profile
           </button>
         </div>
-        <div className='mt-10'>
-          <p className='text-xl font-semibold text-slate-700 mb-5'>Applied Jobs</p>
-          <AppliedJobs />
-        </div>
+        {
+          user?.role === "student" && <div className='mt-10'>
+            <p className='text-xl font-semibold text-slate-700 mb-5'>Applied Jobs</p>
+            <AppliedJobs />
+          </div>
+        }
+
         <EditAccountModal editProfile={editProfile} setEditProfile={setEditProfile} />
       </div>
     </div >

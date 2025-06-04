@@ -33,7 +33,7 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
       email: user?.email ? user.email : "",
       phoneNumber: user?.phoneNumber ? user.phoneNumber : "",
       skills: user?.profile.skills ? user.profile.skills : "",
-      role: user?.profile.role ? user.profile.role : ""
+      role: user?.role ? user.role : ""
     })
   }, [user])
 
@@ -45,7 +45,7 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
     e.preventDefault();
     setShowConfirmation(true)
   }
-  const handleConfirm = async (e) => {
+  const handleConfirm = async () => {
     dispatch(setLoading(true));
     try {
       const formData = new FormData();
@@ -93,55 +93,51 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
   {
     return editProfile ? (
       <>
-        <div>
-          <div className='absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50  '>
-            <div className=''>
-              <h2 className='text-blue-500 font-semibold text-2xl'>Edit Account</h2>
-              <form className='border rounded-md shadow-xl p-5 flex flex-col gap-5 w-[80vw] md:w-[30vw] ' action="">
-                <label htmlFor='profile' >
-                  <img className='w-[15vw] rounded-md mx-auto cursor-pointer' src={showTempFile.photo} alt="img not found" />
-                  <input onChange={fileHandler} className='hidden' type="file" id='profile' name='photo' accept='image/*' />
-                </label>
-                <label className='flex flex-col items-left' htmlFor='resume' >
-                  <p className='font-semibold'>Update resume: </p>
-                  {inputData.resume && <a className="text-blue-500" target='_blank' href={inputData.resume}>showresume</a>}
-                  <input onChange={fileHandler} className=' font-light cursor-pointer' type="file" id='resume' name='resume' accept='application/pdf' />
-                </label>
-                <label className='w-full' htmlFor="name">
-                  <p className='text-slate-800 font-semibold'>Name:</p>
-                  <input value={inputData.fullname} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="fullname" id="name" />
-                </label>
-                <label htmlFor="email">
-                  <p className='text-slate-800 font-semibold'>Email:</p>
-                  <input value={inputData.email} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="email" id="email" />
-                </label>
-                <label htmlFor="email">
-                  <p className='text-slate-800 font-semibold'>Bio:</p>
-                  <textarea onChange={handleForm} className='border w-full outline-none rounded-md p-2' name="bio" id="">
-                    {inputData.bio}
-                  </textarea>
-                </label>
-                <label htmlFor="Phone">
-                  <p className='text-slate-800 font-semibold'>Phone:</p>
-                  <input value={inputData.phoneNumber} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="number" name="phoneNumber" id="Phone" placeholder='98000000' />
-                </label>
-                <label htmlFor="skills">
-                  <p className='text-slate-800 font-semibold'>Skills:</p>
-                  <input value={inputData.skills} placeholder='Frontend, Backend, UI/UX' onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="skills" id="skills" />
-                </label>
+        <div className='absolute flex justify-center inset-0 bg-gray-200 bg-opacity-50 rounded-md '>
+          <form className='overflow-y-scroll m-h-screen  rounded-md shadow-xl p-5 flex flex-col gap-5 w-[80vw] md:w-[30vw] ' action="">
+            <label htmlFor='profile' >
+              <img className='w-[10vw] rounded-md mx-auto cursor-pointer' src={showTempFile.photo} alt="img not found" />
+              <input onChange={fileHandler} className='hidden' type="file" id='profile' name='photo' accept='image/*' />
+            </label>
+            <label className='flex flex-col items-left' htmlFor='resume' >
+              <p className='font-semibold'>Update resume: </p>
+              {inputData.resume && <a className="text-blue-500" target='_blank' href={inputData.resume}>showresume</a>}
+              <input onChange={fileHandler} className=' font-light cursor-pointer' type="file" id='resume' name='resume' accept='application/pdf' />
+            </label>
+            <label className='w-full' htmlFor="name">
+              <p className='text-slate-800 font-semibold'>Name:</p>
+              <input value={inputData.fullname} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="fullname" id="name" />
+            </label>
+            <label htmlFor="email">
+              <p className='text-slate-800 font-semibold'>Email:</p>
+              <input value={inputData.email} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="email" id="email" />
+            </label>
+            <label htmlFor="email">
+              <p className='text-slate-800 font-semibold'>Bio:</p>
+              <textarea onChange={handleForm} className='border w-full outline-none rounded-md p-2' name="bio" id="">
+                {inputData.bio}
+              </textarea>
+            </label>
+            <label htmlFor="Phone">
+              <p className='text-slate-800 font-semibold'>Phone:</p>
+              <input value={inputData.phoneNumber} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="number" name="phoneNumber" id="Phone" placeholder='98000000' />
+            </label>
+            <label htmlFor="skills">
+              <p className='text-slate-800 font-semibold'>Skills:</p>
+              <input value={inputData.skills} placeholder='Frontend, Backend, UI/UX' onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="skills" id="skills" />
+            </label>
 
-                <select disabled onChange={handleForm} className='cursor-not-allowed border w-full p-2 rounded-md' value={inputData.role} name="" id="">
-                  <option value="student">Student</option>
-                  <option value="recruiter">Recruiter</option>
-                </select>
+            <select disabled onChange={handleForm} className='cursor-not-allowed border w-full p-2 rounded-md' value={inputData.role} name="" id="">
+              <option value="student">Student</option>
+              <option value="recruiter">Recruiter</option>
+            </select>
 
-                <div className='flex items-center justify-center gap-10'>
-                  <button onClick={handleEditProfile} type='button' className='bg-blue-500 text-white cursor-pointer px-3 py-2 rounded-md border-none hover:bg-blue-700 duration-100' >Save</button>
-                  <button onClick={() => setEditProfile(prev => !prev)} type='button' className='bg-blue-500 text-white cursor-pointer px-3 py-2 rounded-md border-none hover:bg-blue-700 duration-100' >Cancel</button>
-                </div>
-              </form>
+            <div className='flex items-center justify-center gap-10'>
+              <button onClick={handleEditProfile} type='button' className='bg-blue-500 text-white cursor-pointer px-3 py-2 rounded-md border-none hover:bg-blue-700 duration-100' >Save</button>
+              <button onClick={() => setEditProfile(prev => !prev)} type='button' className='bg-blue-500 text-white cursor-pointer px-3 py-2 rounded-md border-none hover:bg-blue-700 duration-100' >Cancel</button>
             </div>
-          </div>
+          </form>
+
           <ConfirmationModal
             title="Are you sure want to update profile?"
             message="This action cannot be undone."

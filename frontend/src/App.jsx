@@ -14,6 +14,7 @@ import { setUser } from '../redux/slices/authSlice.js'
 import JobDetails from './components/JobDetails.jsx'
 import SavedJobs from './pages/SavedJobs.jsx'
 import AboutUs from './pages/AboutUs.jsx'
+import Dashboard from './admin/pages/dashboard.jsx'
 
 
 const App = () => {
@@ -26,7 +27,6 @@ const App = () => {
 
   const checkAuth = async () => {
     try {
-      console.log("check auth")
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth", { withCredentials: true })
       if (response.data.success === true) {
         localStorage.setItem('isLoggedIn', 'true');
@@ -73,6 +73,7 @@ const App = () => {
       <div className='bg-gradient-to-r from-blue-50 to-white'>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/admin-dashboard' element={<Dashboard />} />
           <Route path='/jobs' element={<Jobs />} />
           <Route path='/job-details/:id' element={<JobDetails />} />
           <Route path='/saved-jobs' element={<SavedJobs />} />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { MdDashboard } from "react-icons/md";
 import { IoIosLogOut } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
 import { Link, useNavigate } from 'react-router-dom';
@@ -71,10 +72,14 @@ const Navbar = () => {
                         <CiUser size={24} />
                         <span className="font-light">View Profile</span>
                       </Link>
-                      <Link to="/saved-jobs" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
+                      {user.role === "recruiter" ? <Link to="/admin-dashboard" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
+                        <MdDashboard />
+                        <span className="font-light">Admin Dashboard</span>
+                      </Link> : <Link to="/saved-jobs" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
                         <img className='w-5' src="https://cdn-icons-png.flaticon.com/512/2956/2956783.png" alt="" />
                         <span className="font-light">View saved jobs</span>
-                      </Link>
+                      </Link>}
+
                       <div
                         className="flex items-center gap-3 hover:text-blue-500 cursor-pointer transition-colors"
                         onClick={handleLogout}
