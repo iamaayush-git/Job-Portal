@@ -17,6 +17,8 @@ import AboutUs from './pages/AboutUs.jsx'
 import Dashboard from './admin/pages/Dashboard.jsx'
 import AddJobs from './admin/pages/AddJobs.jsx'
 import JobList from './admin/pages/JobList.jsx'
+import RegisterCompany from './admin/pages/RegisterCompany.jsx'
+import CompanyList from './admin/pages/CompanyList.jsx'
 
 
 const App = () => {
@@ -75,11 +77,12 @@ const App = () => {
       <div className='bg-gradient-to-r from-blue-50 to-white'>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/admin-dashboard' element={<Dashboard />}>
+          <Route path='/dashboard' element={<Dashboard />}>
             <Route path='add-job' element={<AddJobs />} />
             <Route path='job-list' element={<JobList />} />
+            <Route path='company-list' element={<CompanyList />} />
+            <Route path='register-company' element={<RegisterCompany />} />
           </Route>
-          {/* <Route path='/admin-dashboard' element={<Dashboard />} /> */}
           <Route path='/jobs' element={<Jobs />} />
           <Route path='/job-details/:id' element={<JobDetails />} />
           <Route path='/saved-jobs' element={<SavedJobs />} />

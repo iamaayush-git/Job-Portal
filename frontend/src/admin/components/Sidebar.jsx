@@ -6,32 +6,30 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { name: 'Add Job', to: '/dashboard/add-job' },
-    { name: 'Job List', to: '/dashboard/jobs' },
     { name: 'Register Company', to: '/dashboard/register-company' },
-    { name: 'Manage Users', to: '/dashboard/users' },
-    { name: 'Reports', to: '/dashboard/reports' },
+    { name: 'Company List', to: '/dashboard/company-list' },
+    { name: 'Job List', to: '/dashboard/job-list' },
+    { name: 'Add Job', to: '/dashboard/add-job' },
   ];
 
   return (
     <>
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between bg-gray-800 text-white p-4">
-        <h1 className="text-lg font-bold">Job Portal</h1>
+      <div className="md:hidden ">
         <button onClick={() => setIsOpen(!isOpen)}>
           <FiMenu size={24} />
         </button>
       </div>
 
       {/* Sidebar */}
-      <div className={`bg-gray-800 text-white md:w-64 w-full md:block ${isOpen ? 'block' : 'hidden'} md:relative fixed z-50`}>
+      <div className={`text-gray-800 bg-white md:w-64 w-full md:block ${isOpen ? 'block' : 'hidden'} md:relative fixed z-50`}>
         <div className="p-4 space-y-4">
           <h2 className="text-xl font-semibold mb-6 hidden md:block">Admin Dashboard</h2>
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="block px-4 py-2 rounded hover:bg-gray-700 transition"
+              className="block px-4 py-2 rounded hover:bg-gray-100 transition"
               onClick={() => setIsOpen(false)} // Auto close on mobile
             >
               {link.name}

@@ -72,7 +72,7 @@ const Navbar = () => {
                         <CiUser size={24} />
                         <span className="font-light">View Profile</span>
                       </Link>
-                      {user.role === "recruiter" ? <Link to="/admin-dashboard" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
+                      {user.role === "recruiter" ? <Link to="/dashboard/add-job" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
                         <MdDashboard />
                         <span className="font-light">Admin Dashboard</span>
                       </Link> : <Link to="/saved-jobs" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
