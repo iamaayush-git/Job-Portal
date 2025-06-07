@@ -14,7 +14,9 @@ import { setUser } from '../redux/slices/authSlice.js'
 import JobDetails from './components/JobDetails.jsx'
 import SavedJobs from './pages/SavedJobs.jsx'
 import AboutUs from './pages/AboutUs.jsx'
-import Dashboard from './admin/pages/dashboard.jsx'
+import Dashboard from './admin/pages/Dashboard.jsx'
+import AddJobs from './admin/pages/AddJobs.jsx'
+import JobList from './admin/pages/JobList.jsx'
 
 
 const App = () => {
@@ -73,7 +75,11 @@ const App = () => {
       <div className='bg-gradient-to-r from-blue-50 to-white'>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/admin-dashboard' element={<Dashboard />} />
+          <Route path='/admin-dashboard' element={<Dashboard />}>
+            <Route path='add-job' element={<AddJobs />} />
+            <Route path='job-list' element={<JobList />} />
+          </Route>
+          {/* <Route path='/admin-dashboard' element={<Dashboard />} /> */}
           <Route path='/jobs' element={<Jobs />} />
           <Route path='/job-details/:id' element={<JobDetails />} />
           <Route path='/saved-jobs' element={<SavedJobs />} />
