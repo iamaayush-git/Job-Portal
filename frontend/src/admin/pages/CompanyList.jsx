@@ -2,14 +2,22 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import UpdateCompanyForm from '../components/UpdateCompanyForm';
+import ConfirmationModal from '../components/ConfirmationModel';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../../../redux/slices/loadingSlice';
 
 const CompanyList = () => {
+  const dispatch = useDispatch();
   const [company, setCompany] = useState(null);
+  const [updateCompany, setUpdateCompany] = useState(null)
   const [updateForm, setUpdateForm] = useState(false)
+  const [showConfirmationModel, setShowConfirmationModel] = useState(false)
+  const [companyId, setCompanyId] = useState(null)
 
   const getCompany = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/company/get-all-company", { withCredentials: true })
+      console.log(response)
       if (response.data.success === true) {
         setCompany(response.data.allCompanies)
       }
@@ -18,13 +26,41 @@ const CompanyList = () => {
       toast.error(error.response.data.message)
     }
   }
-  const updateHandler = () => {
+  const updateHandler = (updateCompany) => {
     setUpdateForm(true)
+    setUpdateCompany(updateCompany)
   }
 
 
-  const deleteHandler = () => {
+  const deleteHandler = (id) => {
+    setShowConfirmationModel(true)
+    setCompanyId(id)
+  }
 
+  // for confirmation model
+  const onConfirm = async () => {
+    console.log("onconfirm")
+    try {
+      dispatch(setLoading(true))
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/company/delete-company/" + companyId, { withCredentials: true })
+      if (response.data.success === true) {
+        toast.success(response.data.message)
+        setShowConfirmationModel(false)
+        getCompany()
+      }
+      dispatch(setLoading(false))
+
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+      dispatch(setLoading(false))
+    }
+
+
+  }
+  const onCancel = () => {
+    setShowConfirmationModel(false)
   }
 
   useEffect(() => {
@@ -33,9 +69,9 @@ const CompanyList = () => {
 
 
   return company ? (
-    <div className="max-w-6xl mx-auto mt-10 px-4">
+    <div className="max-w-6xl mx-auto px-4">
+      <ConfirmationModal title={"Confirm Delete?"} message={"Are you sure you want to update this company?"} isOpen={showConfirmationModel} onConfirm={onConfirm} onCancel={onCancel} />
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Companies</h2>
-
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
           <thead className="bg-gray-100">
@@ -57,23 +93,25 @@ const CompanyList = () => {
                     className="h-10 w-10 object-contain rounded"
                   />
                 </td>
-                <td className="py-3 px-4 text-gray-800 font-medium">{company.name || "add company name"}</td>
-                <td className="py-3 px-4 text-blue-600 underline">
-                  <a href={company.website} target="_blank" rel="noopener noreferrer">
-                    {company.website || "Add company website"}
-                  </a>
+                <td className="py-3 px-4 text-gray-800 font-medium">{company.name}</td>
+                <td className="py-3 px-4">
+                  {company?.website ? <a className='text-blue-500 underline' href={company.website} target="_blank" rel="noopener noreferrer">
+                    {company?.website?.length > 30
+                      ? company.website.slice(0, 30) + "..."
+                      : company.website}
+                  </a> : <p className='text-slate-500'>Add your website here..</p>}
                 </td>
-                <td className="py-3 px-4 text-gray-700">{company.location || "Enter company location"}</td>
+                <td className="py-3 px-4 text-gray-700">{company.location ? company.location : <p className='text-slate-500' >Add company location</p>}</td>
                 <td className="py-3 px-4 flex items-center justify-center gap-5">
                   <button
-                    onClick={() => deleteHandler(company.id)}
+                    onClick={() => deleteHandler(company._id)}
                     className="cursor-pointer px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
                   >
                     Delete
                   </button>
                   <button
-                    onClick={() => updateHandler()}
-                    className="cursor-pointer px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    onClick={() => updateHandler(company)}
+                    className="cursor-pointer px-3 py-1 text-sm bg-blue-600 text-white rounded hover:blue-red-700 transition"
                   >
                     Update
                   </button>
@@ -91,7 +129,7 @@ const CompanyList = () => {
           </tbody>
         </table>
       </div>
-      {updateForm && <UpdateCompanyForm setUpdateForm={setUpdateForm} />}
+      {updateForm && <UpdateCompanyForm company={updateCompany} setUpdateForm={setUpdateForm} />}
     </div>
   ) : <div>Loading...</div>;
 };

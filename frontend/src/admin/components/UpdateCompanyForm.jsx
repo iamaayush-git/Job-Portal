@@ -1,56 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ConfirmationModal from './ConfirmationModel';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useDispatch } from "react-redux"
+import { setLoading } from "../../../redux/slices/loadingSlice.js"
 
 const UpdateCompanyForm = ({ company, setUpdateForm }) => {
+  const dispatch = useDispatch();
 
-  
+  const [showConfirmationModel, setShowConfirmationModel] = useState(false)
+  const [preview, setPreview] = useState(company.logo)
 
-
-  const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    website: '',
-    location: '',
-    logo: '',
+  const [formValue, setFormValue] = useState({
+    name: company.name,
+    description: company.description,
+    website: company.website,
+    location: company.location,
+    logo: "",
   });
-  const [preview, setPreview] = useState('');
 
-  useEffect(() => {
-    if (company) {
-      setFormData(company);
-      setPreview(company.logo);
-    }
-  }, [company]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
+    console.log(formValue)
+    setFormValue(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageURL = URL.createObjectURL(file);
-      setPreview(imageURL);
-
-      // Optional: upload file to server or convert to base64
-      // For now we just keep the preview, but update formData to simulate image update
-      setFormData(prev => ({ ...prev, logo: imageURL }));
+    if (e.target.files) {
+      setFormValue(prev => ({ ...prev, logo: e.target.files[0] }))
+      setPreview(URL.createObjectURL(e.target.files[0]))
     }
-  };
+  }
 
+  useEffect(() => {
+    console.log(formValue)
+  }, [formValue])
+
+  // for update form
   const onClose = () => {
+    setFormValue({
+      name: company.name,
+      website: company.website,
+      location: company.location,
+      description: company.description,
+      logo: company.logo || '#',
+    })
+    setPreview(company.logo)
     setUpdateForm(false)
   }
 
-  const onUpdate = (e) => {
-    e.preventDefault();
-
-    console.log("first")
+  const onUpdate = () => {
+    setShowConfirmationModel(true)
   }
+
+  // for confirmation model
+  const onConfirm = async () => {
+    dispatch(setLoading(true))
+    const formData = new FormData();
+    formData.append("name", formValue.name || "")
+    formData.append("description", formValue.description || "")
+    formData.append("website", formValue.website || "")
+    formData.append("location", formValue.location || "")
+    formData.append("logo", formValue.logo || "")
+
+    try {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/company/update-company/" + company._id, formData, { withCredentials: true })
+      if (response.data.success === true) {
+        toast.success(response.data.message)
+        dispatch(setLoading(false))
+        setShowConfirmationModel(false)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message)
+      dispatch(setLoading(false))
+    }
+  }
+  const onCancel = () => {
+    setShowConfirmationModel(false)
+  }
+
+
 
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+      <ConfirmationModal message={"Are you sure you want to update this company?"} title={"Confirm update?"} isOpen={showConfirmationModel} onCancel={onCancel} onConfirm={onConfirm} />
       <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Update Company</h2>
         <form className="space-y-4">
@@ -60,19 +94,26 @@ const UpdateCompanyForm = ({ company, setUpdateForm }) => {
             <input
               type="text"
               name="name"
-              value={formData.name}
+              placeholder='Enter name'
+              value={formValue.name}
               onChange={handleChange}
               className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          {/* description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea placeholder='Enter description' onChange={handleChange} className='w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500' name="description" id="" value={formValue.description}></textarea>
           </div>
 
           {/* Website */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
             <input
+              placeholder='Enter website link'
               type="text"
               name="website"
-              value={formData.website}
+              value={formValue.website}
               onChange={handleChange}
               className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500"
             />
@@ -82,9 +123,10 @@ const UpdateCompanyForm = ({ company, setUpdateForm }) => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
             <input
+              placeholder='Enter location'
               type="text"
               name="location"
-              value={formData.location}
+              value={formValue.location}
               onChange={handleChange}
               className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500"
             />
@@ -121,7 +163,7 @@ const UpdateCompanyForm = ({ company, setUpdateForm }) => {
             </button>
             <button
               onClick={onUpdate}
-              type="submit"
+              type="button"
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               Update

@@ -1,4 +1,6 @@
 import { Company } from "../models/companyModel.js";
+import { cloudinary } from "../utils/cloudinary.js";
+import fs from "fs"
 
 const registerCompany = async (req, res) => {
   try {
@@ -11,6 +13,7 @@ const registerCompany = async (req, res) => {
     }
 
     const company = await Company.findOne({ name: companyName });
+
     if (company) {
       return res.status(400).json({
         success: false,
@@ -95,15 +98,39 @@ const getCompanyById = async (req, res) => {
 const updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
-    const file = req.files
-    //  cloudinary here
+    const logo = req.file;
 
-    const company = await Company.findByIdAndUpdate(req.params.id, {
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        message: "Name can not be empty"
+      })
+    }
+
+    // cloudinary
+    let logoUrl = null;
+    if (logo) {
+      const result = await cloudinary.uploader.upload(logo.path, {
+        folder: "company-logo"
+      })
+      logoUrl = result.secure_url
+      // delete files from local storage
+      fs.unlinkSync(logo.path)
+    }
+
+    const upDateData = {
+      name,
       name,
       description,
       website,
       location
-    }, { new: true })
+    }
+    if (logoUrl) {
+      upDateData.logo = logoUrl
+    }
+
+
+    const company = await Company.findByIdAndUpdate(req.params.id, upDateData, { new: true })
 
     if (!company) {
       return res.status(404).json({
@@ -114,11 +141,9 @@ const updateCompany = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Company information updated"
+      message: "Company information updated",
+      company
     })
-
-
-
 
   } catch (error) {
     console.log(error),
@@ -129,6 +154,23 @@ const updateCompany = async (req, res) => {
   }
 }
 
+const deleteCompany = async (req, res) => {
+  const companyId = req.params.id
+  if (!companyId) {
+    return res.status(400).json({
+      success: false,
+      message: "Company id doesn't found"
+    })
+  }
+
+  const company = await Company.findByIdAndDelete(companyId);
+
+  return res.status(200).json({
+    success: true,
+    message: "Company deleted successfully"
+  })
+}
 
 
-export { registerCompany, getAllCompany, getCompanyById, updateCompany }
+
+export { registerCompany, getAllCompany, getCompanyById, updateCompany, deleteCompany }

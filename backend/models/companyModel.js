@@ -5,7 +5,7 @@ const companySchema = new mongoose.Schema({
   description: { type: String },
   website: { type: String },
   location: { type: String },
-  logo: { type: String, default: "" },
+  logo: { type: String, default: "https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg" },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
 }, { timestamps: true })
 
