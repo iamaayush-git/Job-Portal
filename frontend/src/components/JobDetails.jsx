@@ -9,6 +9,7 @@ import { setSavedJobs } from '../../redux/slices/jobsSlice.js';
 const JobDetails = () => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.auth)
+  console.log(user)
   const { savedJobs } = useSelector(state => state.job)
 
   const [hasApplied, setHasApplied] = useState(false);
@@ -40,6 +41,10 @@ const JobDetails = () => {
 
   const handleAlreadyAppliedButton = () => {
     toast.error("Job already applied")
+  }
+
+  const handleRecruiterApply = () => {
+    toast.error("Your current role does not permit job applications for this position.")
   }
 
   const handleJobApply = async (e) => {
@@ -91,11 +96,11 @@ const JobDetails = () => {
 
 
   return job ? (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md mt-8">
+    <div className="min-h-full max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
       <div className="mb-4 border-b pb-4">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{job?.title}</h1>
-        <div>
-          {job?.company?.logo.length > 0 && <img src={job?.company?.logo} alt="" />}
+        <div className=''>
+          {job?.company?.logo.length > 0 && <img className='w-45 h-45 py-5' src={job?.company?.logo} alt="" />}
           <p className="text-sm text-gray-500 mt-1">{job?.company?.name} • {job?.location}</p>
         </div>
       </div>
@@ -135,7 +140,9 @@ const JobDetails = () => {
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
 
         {
-          job?.applications.some((item) => item?.applicant === user._id) || hasApplied
+          user?.role === "recruiter" ? <button onClick={handleRecruiterApply} className="cursor-pointer w-full sm:w-auto bg-gray-600 text-white font-medium py-2 px-6 rounded transition">
+            Apply Now
+          </button> : job?.applications.some((item) => item?.applicant === user?._id) || hasApplied
             ? <button onClick={handleAlreadyAppliedButton} className="cursor-pointer w-full sm:w-auto bg-gray-600 text-white font-medium py-2 px-6 rounded transition">
               Apply Now
             </button> : <button onClick={handleJobApply} className="cursor-pointer w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition">
@@ -143,7 +150,7 @@ const JobDetails = () => {
             </button>
         }
         {
-          savedJobs.some(job => job._id == id) ? <button onClick={handleRemoveJob} className="cursor-pointer w-full sm:w-auto bg-gray-100  hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded transition">
+          savedJobs.some(job => job?._id == id) ? <button onClick={handleRemoveJob} className="cursor-pointer w-full sm:w-auto bg-gray-100  hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded transition">
             Remove Job
           </button> : <button onClick={handleSaveJob} className="cursor-pointer w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded transition">
             Save Job

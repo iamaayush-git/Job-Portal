@@ -5,9 +5,11 @@ import UpdateCompanyForm from '../components/UpdateCompanyForm';
 import ConfirmationModal from '../components/ConfirmationModel';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../redux/slices/loadingSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CompanyList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [company, setCompany] = useState(null);
   const [updateCompany, setUpdateCompany] = useState(null)
   const [updateForm, setUpdateForm] = useState(false)
@@ -17,7 +19,6 @@ const CompanyList = () => {
   const getCompany = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/company/get-all-company", { withCredentials: true })
-      console.log(response)
       if (response.data.success === true) {
         setCompany(response.data.allCompanies)
       }
@@ -26,20 +27,21 @@ const CompanyList = () => {
       toast.error(error.response.data.message)
     }
   }
-  const updateHandler = (updateCompany) => {
+  const updateHandler = (e, updateCompany) => {
+    e.stopPropagation()
     setUpdateForm(true)
     setUpdateCompany(updateCompany)
   }
 
 
-  const deleteHandler = (id) => {
+  const deleteHandler = (e, id) => {
+    e.stopPropagation();
     setShowConfirmationModel(true)
     setCompanyId(id)
   }
 
   // for confirmation model
   const onConfirm = async () => {
-    console.log("onconfirm")
     try {
       dispatch(setLoading(true))
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/company/delete-company/" + companyId, { withCredentials: true })
@@ -61,6 +63,11 @@ const CompanyList = () => {
   }
   const onCancel = () => {
     setShowConfirmationModel(false)
+  }
+
+  const handleAddJobs = (id) => {
+    navigate("/dashboard/add-job/" + id)
+
   }
 
   useEffect(() => {
@@ -85,7 +92,7 @@ const CompanyList = () => {
           </thead>
           <tbody>
             {company.map((company, index) => (
-              <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+              <tr onClick={() => handleAddJobs(company._id)} key={index} className="cursor-pointer border-t border-gray-200 hover:bg-gray-50">
                 <td className="py-3 px-4">
                   <img
                     src={company.logo || "#"}
@@ -104,13 +111,13 @@ const CompanyList = () => {
                 <td className="py-3 px-4 text-gray-700">{company.location ? company.location : <p className='text-slate-500' >Add company location</p>}</td>
                 <td className="py-3 px-4 flex items-center justify-center gap-5">
                   <button
-                    onClick={() => deleteHandler(company._id)}
+                    onClick={(e) => deleteHandler(e, company._id)}
                     className="cursor-pointer px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
                   >
                     Delete
                   </button>
                   <button
-                    onClick={() => updateHandler(company)}
+                    onClick={(e) => updateHandler(e, company)}
                     className="cursor-pointer px-3 py-1 text-sm bg-blue-600 text-white rounded hover:blue-red-700 transition"
                   >
                     Update

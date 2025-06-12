@@ -90,7 +90,7 @@ const AppliedJobs = () => {
           )) : <tr><td className='text-red-500 p-5'>No applied jobs found</td></tr>}
         </tbody>
       </table>
-      <ConfirmationModal showConfirmation={showConfirmation} title={"Are you sure"} message={"go on"} onCancel={onCancel} onConfirm={onConfirm} />
+      <ConfirmationModal showConfirmation={showConfirmation} title={"Confirm Delete?"} message={"Are you sure want to cancel this application?"} onCancel={onCancel} onConfirm={onConfirm} />
     </div>
   );
 };

@@ -8,8 +8,7 @@ const Sidebar = () => {
   const links = [
     { name: 'Register Company', to: '/dashboard/register-company' },
     { name: 'Company List', to: '/dashboard/company-list' },
-    { name: 'Job List', to: '/dashboard/job-list' },
-    { name: 'Add Job', to: '/dashboard/add-job' },
+    { name: 'Job List', to: '/dashboard/job-list' }
   ];
 
   return (

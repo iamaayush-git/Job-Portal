@@ -5,6 +5,15 @@ import { User } from "../models/userModel.js";
 const applyJob = async (req, res) => {
   try {
     const userId = req.user.userId;
+    const user = await User.findById(userId);
+
+    if (user.role === "recruiter") {
+      return res.status(400).json({
+        success: false,
+        message: "Your current role does not permit this job application."
+      })
+    }
+
     const jobId = req.params.id;
     if (!jobId) {
       return res.status(400).json({
@@ -132,6 +141,15 @@ const getAppliedJobs = async (req, res) => {
 const getApplicants = async (req, res) => {
   try {
     const jobId = req.params.id;
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(400).json({
+        success: false,
+        message: "Job id doesn't match."
+      })
+    }
+
     const applicants = await Application.find({ job: jobId }).sort({ createdAt: -1 }).populate({
       path: 'applicant',
       options: { sort: { createdAt: -1 } }
@@ -164,6 +182,7 @@ const getApplicants = async (req, res) => {
 const updateStatus = async (req, res) => {
   try {
     const applicationId = req.params.id;
+    console.log(applicationId)
     const { status } = req.body;
     const updatedApplication = await Application.findByIdAndUpdate(applicationId, { status }, { new: true })
 

@@ -72,13 +72,14 @@ const Navbar = () => {
                         <CiUser size={24} />
                         <span className="font-light">View Profile</span>
                       </Link>
-                      {user.role === "recruiter" ? <Link to="/dashboard/add-job" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
+                      {user.role === "recruiter" && <Link to="/dashboard/register-company" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
                         <MdDashboard />
                         <span className="font-light">Admin Dashboard</span>
-                      </Link> : <Link to="/saved-jobs" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
+                      </Link>}
+                      <Link to="/saved-jobs" className="flex items-center gap-3 hover:text-blue-500 transition-colors">
                         <img className='w-5' src="https://cdn-icons-png.flaticon.com/512/2956/2956783.png" alt="" />
                         <span className="font-light">View saved jobs</span>
-                      </Link>}
+                      </Link>
 
                       <div
                         className="flex items-center gap-3 hover:text-blue-500 cursor-pointer transition-colors"

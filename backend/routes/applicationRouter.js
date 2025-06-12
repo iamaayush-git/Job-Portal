@@ -9,6 +9,6 @@ applicationRouter.get("/apply/:id", isauthenicate, applyJob)
 applicationRouter.get("/cancel-application/:id", isauthenicate, cancelApplication)
 applicationRouter.get("/get-applied-jobs", isauthenicate, getAppliedJobs)
 applicationRouter.get("/get-applicants/:id", isauthenicate, getApplicants)
-applicationRouter.get("/update-status/:id", isauthenicate, updateStatus)
+applicationRouter.post("/update-status/:id", isauthenicate, updateStatus)
 
 export default applicationRouter;

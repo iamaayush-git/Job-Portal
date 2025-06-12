@@ -19,6 +19,7 @@ import AddJobs from './admin/pages/AddJobs.jsx'
 import JobList from './admin/pages/JobList.jsx'
 import RegisterCompany from './admin/pages/RegisterCompany.jsx'
 import CompanyList from './admin/pages/CompanyList.jsx'
+import Applicants from './admin/pages/Applicants.jsx'
 
 
 const App = () => {
@@ -78,10 +79,11 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/dashboard' element={<Dashboard />}>
-            <Route path='add-job' element={<AddJobs />} />
+            <Route path='add-job/:id' element={<AddJobs />} />
             <Route path='job-list' element={<JobList />} />
             <Route path='company-list' element={<CompanyList />} />
             <Route path='register-company' element={<RegisterCompany />} />
+            <Route path='applicants/:id' element={<Applicants />} />
           </Route>
           <Route path='/jobs' element={<Jobs />} />
           <Route path='/job-details/:id' element={<JobDetails />} />

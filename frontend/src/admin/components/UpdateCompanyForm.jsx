@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ConfirmationModal from './ConfirmationModel';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -30,10 +30,6 @@ const UpdateCompanyForm = ({ company, setUpdateForm }) => {
       setPreview(URL.createObjectURL(e.target.files[0]))
     }
   }
-
-  useEffect(() => {
-    console.log(formValue)
-  }, [formValue])
 
   // for update form
   const onClose = () => {

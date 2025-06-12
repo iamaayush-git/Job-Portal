@@ -1,4 +1,7 @@
+import { Application } from "../models/applicationModel.js";
 import { Company } from "../models/companyModel.js";
+import { Job } from "../models/jobModel.js";
+import { User } from "../models/userModel.js";
 import { cloudinary } from "../utils/cloudinary.js";
 import fs from "fs"
 
@@ -163,7 +166,30 @@ const deleteCompany = async (req, res) => {
     })
   }
 
-  const company = await Company.findByIdAndDelete(companyId);
+  const company = await Company.findById(companyId);
+  if (!company) {
+    return res.status(404).json({
+      success: false,
+      message: "Company not found"
+    });
+  }
+
+  // Delete all jobs associated with the company
+  await Job.deleteMany({ company: companyId });
+
+  // Delete all applications associated with the company's jobs
+  const jobIds = await Job.find({ company: companyId }).distinct("_id")
+
+  // Remove deleted jobs from savedJobs of all users
+  await User.updateMany(
+    { "profile.savedJobs": { $in: jobIds } },
+    { $pull: { "profile.savedJobs": { $in: jobIds } } }
+  );
+  await Application.deleteMany({ job: { $in: jobIds } });
+
+  // Delete the company itself
+  await Company.findByIdAndDelete(companyId);
+
 
   return res.status(200).json({
     success: true,

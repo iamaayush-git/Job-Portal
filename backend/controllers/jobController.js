@@ -1,10 +1,13 @@
+import { Application } from "../models/applicationModel.js";
+import { Company } from "../models/companyModel.js";
 import { Job } from "../models/jobModel.js";
 import { User } from "../models/userModel.js";
 
 const postJob = async (req, res) => {
   try {
-    const { title, description, salary, location, jobType, position, companyId, requirements, experienceLevel } = req.body;
+    const { title, description, salary, location, jobType, position, requirements, experienceLevel } = req.body;
     const userId = req.user.userId;
+    const companyId = req.params.id;
 
     if (!title || !description || !salary || !location || !jobType || !position || !companyId || !requirements || !experienceLevel) {
       return res.status(400).json({
@@ -12,6 +15,16 @@ const postJob = async (req, res) => {
         message: "All fields are mandatory"
       })
     }
+
+    const company = await Company.findById(companyId);
+    if (!company) {
+      return res.status(400).json({
+        success: false,
+        message: "Company id doesn't match"
+      })
+    }
+
+
     const requirementArray = requirements.split(',').map(item => item.trim())
 
     const job = await Job.create({
@@ -35,6 +48,45 @@ const postJob = async (req, res) => {
 
   } catch (error) {
     console.log(error)
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    })
+  }
+}
+
+const deleteJob = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found"
+      })
+    }
+    const userId = req.user.userId;
+    if (job.created_by.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to delete this job"
+      })
+    }
+
+    await Job.findByIdAndDelete(jobId);
+    await Application.deleteMany({ job: jobId })
+    await User.updateMany(
+      { "profile.savedJobs": jobId },
+      { $pull: { "profile.savedJobs": jobId } }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Job deleted successfully"
+    })
+
+  } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -105,7 +157,7 @@ const getJobById = async (req, res) => {
 const getAdminJobs = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const allAdminJobs = await Job.find({ created_by: userId })
+    const allAdminJobs = await Job.find({ created_by: userId }).populate('company')
     if (!allAdminJobs) {
       return res.status(404).json({
         success: false,
@@ -261,4 +313,4 @@ const removeSavedJobs = async (req, res) => {
 }
 
 
-export { postJob, getAllJobs, getJobById, getAdminJobs, saveJob, removeSavedJobs, getSavedJobs }
+export { postJob, getAllJobs, getJobById, getAdminJobs, saveJob, removeSavedJobs, getSavedJobs, deleteJob }
