@@ -1,5 +1,4 @@
 import axios from 'axios';
-import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSavedJobs } from '../../redux/slices/jobsSlice';
 import { toast } from 'react-toastify';
@@ -37,7 +36,7 @@ const SavedJobs = () => {
           {savedJobs.map((job, index) => (
             <li onClick={() => navigate('/job-details/' + job._id)}
               key={index}
-              className="bg-white shadow-md rounded-md p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center"
+              className="cursor-pointer bg-white shadow-md rounded-md p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center"
             >
               <div>
                 <div className=' flex items-center gap-5' >

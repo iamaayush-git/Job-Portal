@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setJobs, setSavedJobs } from '../../redux/slices/jobsSlice'
+import { setSavedJobs } from '../../redux/slices/jobsSlice'
 import { toast } from 'react-toastify'
 
 const JobCard = ({ _id, company, location, title, description, position, jobType, salary }) => {
@@ -57,13 +57,13 @@ const JobCard = ({ _id, company, location, title, description, position, jobType
 
       <div className="grid grid-cols-3 gap-2">
         <span className="flex items-center justify-center px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
-          {position}
+          level {position}
         </span>
         <span className="flex items-center justify-center px-2 py-1 text-sm bg-green-100 text-green-800 rounded-full">
           {jobType}
         </span>
         <span className="flex items-center justify-center px-2 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">
-          {salary}
+          Rs.{salary}
         </span>
       </div>
       <div className='flex items-center justify-center gap-10 mt-5'>

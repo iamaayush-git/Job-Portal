@@ -17,6 +17,7 @@ const Applicants = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector(state => state.loading)
 
+  console.log(applicants)
   const getApplicant = async () => {
     dispatch(setLoading(true))
     try {
@@ -65,6 +66,7 @@ const Applicants = () => {
             <tr>
               <th className="text-left px-6 py-3">Name</th>
               <th className="text-left px-6 py-3">Email</th>
+              <th className="text-left px-6 py-3">Resume</th>
               <th className="text-left px-6 py-3">Status</th>
               <th className="text-left px-6 py-3">Indicator</th>
             </tr>
@@ -74,6 +76,8 @@ const Applicants = () => {
               <tr key={applicant._id} className="border-t hover:bg-gray-50 transition">
                 <td className="px-6 py-4">{applicant.applicant.fullname}</td>
                 <td className="px-6 py-4">{applicant.applicant.email}</td>
+                <td className="text-blue-500 font-semibold px-6 py-4"><a target='_blank' href={applicant.applicant.profile.resume}>show resume</a> </td>
+
                 <td className="px-6 py-4">
                   <select
                     className="border px-3 py-1 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"

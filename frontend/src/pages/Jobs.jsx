@@ -20,15 +20,15 @@ const Jobs = () => {
   }, [searchTerm, jobs]);
 
   return (
-    <div className="w-[90vw] mx-auto pt-5 ">
-      <div className="w-[30%] ml-auto  text-lg font-bold text-slate-700">
+    <div className="w-[90vw] mx-auto pt-2 ">
+      <div className="w-[30%] ml-auto  font-semibold text-slate-700">
         <div className="mt-5">
           <input
             type="text"
             placeholder="Search by job title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="outline-none w-full p-2 border rounded-md"
+            className="text-sm text-slate-700 outline-none w-full p-2 border rounded-md"
           />
         </div>
       </div>

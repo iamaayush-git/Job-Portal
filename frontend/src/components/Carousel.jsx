@@ -1,5 +1,6 @@
 // src/components/JobCarousel.jsx
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const jobTitles = [
   'Frontend Developer',
@@ -34,13 +35,14 @@ const Carousel = () => {
     <>
       <div className="w-full md:w-[70vw] mx-auto mt-10 p-6 bg-transparent rounded-lg shadow">
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 text-center mb-6">
-          {visibleJobs.map((job, idx) => (
-            <div
-              key={idx}
-              className="cursor-pointer text-md p-4 border text-nowrap border-gray-300 rounded shadow-sm hover:bg-blue-50 transition"
-            >
-              {job}
-            </div>
+          {visibleJobs.map((job, index) => (
+            <Link key={index} to={"/jobs"}>
+              <div
+                className="cursor-pointer text-md p-4 border text-nowrap border-gray-300 rounded shadow-sm hover:bg-blue-50 transition"
+              >
+                {job}
+              </div>
+            </Link>
           ))}
         </div>
 

@@ -19,6 +19,7 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
     resume: ""
   })
 
+  console.log(inputData.bio)
 
   useEffect(() => {
     setShowTempFile({
@@ -93,17 +94,25 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
   {
     return editProfile ? (
       <>
-        <div className='absolute flex justify-center inset-0 bg-gray-200 bg-opacity-50 rounded-md '>
+        <div className='py-10 absolute flex justify-center inset-0 bg-gray-200 bg-opacity-50 rounded-md '>
           <form className='overflow-y-scroll m-h-screen  rounded-md shadow-xl p-5 flex flex-col gap-5 w-[80vw] md:w-[30vw] ' action="">
+
             <label htmlFor='profile' >
               <img className='w-[10vw] rounded-md mx-auto cursor-pointer' src={showTempFile.photo} alt="img not found" />
               <input onChange={fileHandler} className='hidden' type="file" id='profile' name='photo' accept='image/*' />
             </label>
-            <label className='flex flex-col items-left' htmlFor='resume' >
-              <p className='font-semibold'>Update resume: </p>
-              {inputData.resume && <a className="text-blue-500" target='_blank' href={inputData.resume}>showresume</a>}
-              <input onChange={fileHandler} className=' font-light cursor-pointer' type="file" id='resume' name='resume' accept='application/pdf' />
-            </label>
+
+
+            {
+              user?.role === "student" && (<label className='flex flex-col items-left' htmlFor='resume' >
+                <p className='font-semibold'>Update resume: </p>
+                {inputData.resume && <a className="text-blue-500" target='_blank' href={inputData.resume}>showresume</a>}
+                <input onChange={fileHandler} className=' font-light cursor-pointer' type="file" id='resume' name='resume' accept='application/pdf' />
+              </label>
+              )
+            }
+
+
             <label className='w-full' htmlFor="name">
               <p className='text-slate-800 font-semibold'>Name:</p>
               <input value={inputData.fullname} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="fullname" id="name" />
@@ -114,7 +123,7 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
             </label>
             <label htmlFor="email">
               <p className='text-slate-800 font-semibold'>Bio:</p>
-              <textarea onChange={handleForm} className='border w-full outline-none rounded-md p-2' name="bio" id="">
+              <textarea onChange={handleForm} value={inputData.bio} className='border w-full outline-none rounded-md p-2' name="bio" id="">
                 {inputData.bio}
               </textarea>
             </label>
@@ -122,10 +131,12 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
               <p className='text-slate-800 font-semibold'>Phone:</p>
               <input value={inputData.phoneNumber} onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="number" name="phoneNumber" id="Phone" placeholder='98000000' />
             </label>
-            <label htmlFor="skills">
-              <p className='text-slate-800 font-semibold'>Skills:</p>
-              <input value={inputData.skills} placeholder='Frontend, Backend, UI/UX' onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="skills" id="skills" />
-            </label>
+            {
+              user?.role === "student" && <label htmlFor="skills">
+                <p className='text-slate-800 font-semibold'>Skills:</p>
+                <input value={inputData.skills} placeholder='Frontend, Backend, UI/UX' onChange={handleForm} className='w-full border outline-none rounded-md p-2' type="text" name="skills" id="skills" />
+              </label>
+            }
 
             <select disabled onChange={handleForm} className='cursor-not-allowed border w-full p-2 rounded-md' value={inputData.role} name="" id="">
               <option value="student">Student</option>

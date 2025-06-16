@@ -29,67 +29,6 @@ const AboutUs = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section>
-        <h2 className="text-3xl font-extrabold text-center text-blue-700 mb-12">
-          Meet Our Team
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {/* Team Member */}
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
-            <img
-              src="https://randomuser.me/api/portraits/women/68.jpg"
-              alt="Jane Doe"
-              className="w-28 h-28 rounded-full mb-4 object-cover"
-            />
-            <h3 className="text-xl font-semibold">Jane Doe</h3>
-            <p className="text-blue-600 font-medium">CEO & Founder</p>
-            <p className="text-gray-600 mt-2 text-sm">
-              Passionate about creating opportunities and building a community of professionals.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
-            <img
-              src="https://randomuser.me/api/portraits/men/75.jpg"
-              alt="John Smith"
-              className="w-28 h-28 rounded-full mb-4 object-cover"
-            />
-            <h3 className="text-xl font-semibold">John Smith</h3>
-            <p className="text-blue-600 font-medium">CTO</p>
-            <p className="text-gray-600 mt-2 text-sm">
-              Driving innovation and ensuring a smooth, secure user experience.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
-            <img
-              src="https://randomuser.me/api/portraits/women/65.jpg"
-              alt="Emma Lee"
-              className="w-28 h-28 rounded-full mb-4 object-cover"
-            />
-            <h3 className="text-xl font-semibold">Emma Lee</h3>
-            <p className="text-blue-600 font-medium">Head of Marketing</p>
-            <p className="text-gray-600 mt-2 text-sm">
-              Spreading the word and building lasting relationships with our users.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
-            <img
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="Michael Brown"
-              className="w-28 h-28 rounded-full mb-4 object-cover"
-            />
-            <h3 className="text-xl font-semibold">Michael Brown</h3>
-            <p className="text-blue-600 font-medium">Lead Developer</p>
-            <p className="text-gray-600 mt-2 text-sm">
-              Building features that make the job search easy and efficient.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Values Section */}
       <section className="mt-16">

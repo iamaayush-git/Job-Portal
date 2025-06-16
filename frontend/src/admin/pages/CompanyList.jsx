@@ -90,15 +90,21 @@ const CompanyList = () => {
               <th className="text-center py-3 px-4 text-sm font-semibold text-gray-700">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className=''>
             {company.map((company, index) => (
-              <tr onClick={() => handleAddJobs(company._id)} key={index} className="cursor-pointer border-t border-gray-200 hover:bg-gray-50">
-                <td className="py-3 px-4">
+              <tr onClick={() => handleAddJobs(company._id)} key={index} className="cursor-pointer border-t border-gray-200 hover:bg-gray-50 group relative ">
+
+                <td className="py-3 px-4 group relative">
                   <img
                     src={company.logo || "#"}
                     alt={`${company.name} logo`}
                     className="h-10 w-10 object-contain rounded"
                   />
+
+                  {/* hover message */}
+                  <span className="bg-slate-400 absolute -top-5 text-center py-1 rounded-md text-nowrap left-12 text-sm text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-20">
+                    Add Job
+                  </span>
                 </td>
                 <td className="py-3 px-4 text-gray-800 font-medium">{company.name}</td>
                 <td className="py-3 px-4">

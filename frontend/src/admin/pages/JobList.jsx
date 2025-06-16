@@ -16,7 +16,6 @@ const JobList = () => {
   const fetchAdminJobs = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-admin-jobs", { withCredentials: true })
-      console.log(response)
       if (response.data.success === true) {
         setJobs(response.data.allAdminJobs)
       }
@@ -69,14 +68,13 @@ const JobList = () => {
             <div className="flex-1 space-y-1">
               <h3 className="text-lg font-semibold text-gray-800">{job.title}</h3>
               <p className="text-sm text-gray-600">Company: {job.company.name}</p>
-              <p className="text-sm text-gray-600">Company: Rs.{job.salary}</p>
+              <p className="text-sm text-gray-600">Salary: Rs.{job.salary}</p>
               <p className="text-sm text-gray-600">Location: {job.location}</p>
               <Link to={'/dashboard/applicants/' + job?._id}>
                 <div className='relative group cursor-pointer'>
                   <p className="text-sm text-gray-500">
                     Applicants: {job.applications?.length || 0}
                   </p>
-
                   <div className="absolute left-0 mt-1 opacity-0 w-max rounded bg-gray-700 px-3 py-1 text-sm text-white transition-opacity duration-200 group-hover:block group-hover:opacity-100">
                     Show applicants
                   </div>

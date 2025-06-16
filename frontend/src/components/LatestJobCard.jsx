@@ -14,13 +14,13 @@ const LatestJobCard = ({ company, location, title, description, position, jobTyp
 
       <div className="flex flex-wrap gap-2">
         <span className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
-          {position}
+          level {position}
         </span>
         <span className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
           {jobType}
         </span>
         <span className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-full">
-          {salary}
+          Rs.{salary}
         </span>
       </div>
     </div>

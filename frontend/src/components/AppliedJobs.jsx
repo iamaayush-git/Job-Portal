@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { TiTick } from "react-icons/ti";
+import { GiCrossMark } from "react-icons/gi";
+import { MdOutlinePending, MdPending } from "react-icons/md";
 import { toast } from "react-toastify"
 import axios from 'axios'
 import ConfirmationModal from './ConfirmationModal';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../redux/slices/loadingSlice';
+
 
 const AppliedJobs = () => {
   const dispatch = useDispatch();
@@ -66,6 +70,7 @@ const AppliedJobs = () => {
 
   return (
     <div className="overflow-x-auto">
+
       <table className="min-w-full border border-gray-200 bg-white shadow-sm rounded-md">
         <thead className="bg-gray-100 text-gray-700 text-sm">
           <tr>
@@ -79,17 +84,31 @@ const AppliedJobs = () => {
         </thead>
         <tbody className="text-sm text-gray-800">
           {appliedJobs.length > 0 ? appliedJobs.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50 transition">
-              <td className="px-4 py-2 border-b">{item.job.title}</td>
-              <td className="px-4 py-2 border-b">{item.job.company.name}</td>
-              <td className="px-4 py-2 border-b">{item.job.location}</td>
-              <td className="px-4 py-2 border-b">{item.job.jobType}</td>
-              <td className="px-4 py-2 border-b">{item.status}</td>
-              <td className="px-4 py-2 border-b"><button onClick={() => handleCancelApplication(item._id)} className='cursor-pointer text-nowrap py-1 px-2 bg-red-500 text-white border-none rounded-md '>Cancel</button></td>
+
+            <tr key={index} className="hover:bg-gray-50 border-b transition ">
+              <td className="px-4 py-2 ">{item?.job?.title}</td>
+              <td className="px-4 py-2 ">{item?.job?.company?.name}</td>
+              <td className="px-4 py-2 ">{item?.job?.location}</td>
+              <td className="px-4 py-2">{item?.job?.jobType}</td>
+              <td className="px-4 py-2">
+                <div className='flex items-center justify-left gap-2'>
+                  {item?.status}
+                  {item?.status === "accepted" && <TiTick size={30} />}
+                  {item?.status === "rejected" && <GiCrossMark size={30} />}
+                  {item?.status === "pending" && <MdOutlinePending size={30} />}
+                </div>
+              </td>
+              <td className="px-4 py-2 border-b">
+                {
+                  item.status === "pending" && <button onClick={() => handleCancelApplication(item._id)} className='cursor-pointer text-nowrap py-1 px-2 bg-red-500 text-white border-none rounded-md '>Cancel</button>
+                }
+              </td>
             </tr>
+
           )) : <tr><td className='text-red-500 p-5'>No applied jobs found</td></tr>}
         </tbody>
       </table>
+
       <ConfirmationModal showConfirmation={showConfirmation} title={"Confirm Delete?"} message={"Are you sure want to cancel this application?"} onCancel={onCancel} onConfirm={onConfirm} />
     </div>
   );

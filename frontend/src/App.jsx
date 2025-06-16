@@ -6,7 +6,7 @@ import Login from "./pages/Login.jsx"
 import Signup from './pages/Signup.jsx'
 import Jobs from './pages/Jobs.jsx'
 import Profile from './pages/Profile.jsx'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setJobs, setSavedJobs } from "../redux/slices/jobsSlice.js"
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -20,10 +20,14 @@ import JobList from './admin/pages/JobList.jsx'
 import RegisterCompany from './admin/pages/RegisterCompany.jsx'
 import CompanyList from './admin/pages/CompanyList.jsx'
 import Applicants from './admin/pages/Applicants.jsx'
+import ProtectedRoutes from './components/ProtectedRoutes.jsx'
+import RoleBasedRoute from './components/RoleBasedRoute.jsx'
+import PublicRoute from './components/PublicRoute.jsx'
 
 
 const App = () => {
   const dispatch = useDispatch();
+  const { user } = useSelector(state => state.auth)
 
   useEffect(() => {
     checkAuth();
@@ -77,21 +81,38 @@ const App = () => {
       <Navbar />
       <div className='bg-gradient-to-r from-blue-50 to-white'>
         <Routes>
+          {/* can access with or without  logged in */}
           <Route path='/' element={<Home />} />
-          <Route path='/dashboard' element={<Dashboard />}>
-            <Route path='add-job/:id' element={<AddJobs />} />
-            <Route path='job-list' element={<JobList />} />
-            <Route path='company-list' element={<CompanyList />} />
-            <Route path='register-company' element={<RegisterCompany />} />
-            <Route path='applicants/:id' element={<Applicants />} />
-          </Route>
           <Route path='/jobs' element={<Jobs />} />
-          <Route path='/job-details/:id' element={<JobDetails />} />
-          <Route path='/saved-jobs' element={<SavedJobs />} />
           <Route path='/about-us' element={<AboutUs />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+
+          {/* can access only when logged out */}
+          <Route element={<PublicRoute user={user} />} >
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<Signup />} />
+          </Route>
+
+
+          {/* can access only when logged in */}
+          <Route element={<ProtectedRoutes user={user} />} >
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/saved-jobs' element={<SavedJobs />} />
+            <Route path='/job-details/:id' element={<JobDetails />} />
+          </Route>
+
+          {/* can access only when the user role is recruiter */}
+          <Route element={<RoleBasedRoute user={user} allowdedRole={['recruiter']} />}>
+            <Route path='/dashboard' element={<Dashboard />}>
+              <Route path='add-job/:id' element={<AddJobs />} />
+              <Route path='job-list' element={<JobList />} />
+              <Route path='company-list' element={<CompanyList />} />
+              <Route path='register-company' element={<RegisterCompany />} />
+              <Route path='applicants/:id' element={<Applicants />} />
+            </Route>
+          </Route>
+
+          {/* unauthorized route */}
+          <Route path="/unauthorized" element={<h1 className="min-h-screen text-center text-red-500 mt-10">Access Denied</h1>} />
         </Routes>
       </div>
     </>

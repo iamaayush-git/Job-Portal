@@ -4,6 +4,7 @@ import AppliedJobs from '../components/AppliedJobs';
 import EditAccountModal from '../components/EditAccountModal';
 
 const Profile = () => {
+
   const [editProfile, setEditProfile] = useState(false)
 
   const showEditForm = () => {
@@ -14,7 +15,7 @@ const Profile = () => {
   const { user } = useSelector(state => state.auth);
 
 
-  return (
+  return !editProfile ? (
     <div className=" min-h-screen bg-gray-100 py-10 px-4 flex justify-center">
       <div className="w-[90vw] relative mx-auto bg-white shadow-lg rounded-lg md:w-[50vw]  p-6 sm:p-8">
         <div className="flex flex-col items-center">
@@ -42,18 +43,22 @@ const Profile = () => {
             <label className="text-gray-600 font-medium">About:</label>
             <p className="text-gray-700">{user?.profile?.bio ? user.profile.bio : "please add your details."}</p>
           </div>
-          <div>
-            <p className='text-gray-600 font-medium'>Skills:</p>
-            <div className='flex flex-wrap items-center gap-3'>
-              {user?.profile?.skills.length > 0 ? user?.profile?.skills.map((item, index) => {
-                return <div key={index} className='p-1 rounded-md text-slate-700 border'>{item}</div>
-              }) : "please add skills"}
+          {
+            user?.role === "student" && <div>
+              <p className='text-gray-600 font-medium'>Skills:</p>
+              <div className='flex flex-wrap items-center gap-3'>
+                {user?.profile?.skills.length > 0 ? user?.profile?.skills.map((item, index) => {
+                  return <div key={index} className='p-1 rounded-md text-slate-700 border'>{item}</div>
+                }) : "please add skills"}
+              </div>
             </div>
-          </div>
-          <div>
-            <p className='text-gray-600 font-medium'>Resume: </p>
-            {user?.profile?.resume ? < a target='_blank' href={user?.profile?.resume} className='text-blue-500'>show_resume</a> : <p>Add your resume</p>}
-          </div>
+          }
+          {
+            user?.role === "student" && <div>
+              <p className='text-gray-600 font-medium'>Resume: </p>
+              {user?.profile?.resume ? < a target='_blank' href={user?.profile?.resume} className='text-blue-500'>show_resume</a> : <p>Add your resume</p>}
+            </div>
+          }
         </div>
 
         <div className="mt-6 text-center">
@@ -68,10 +73,9 @@ const Profile = () => {
           </div>
         }
 
-        <EditAccountModal editProfile={editProfile} setEditProfile={setEditProfile} />
       </div>
-    </div >
-  );
+    </div >) :
+    <EditAccountModal editProfile={editProfile} setEditProfile={setEditProfile} />
 };
 
 export default Profile;

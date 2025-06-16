@@ -9,7 +9,6 @@ import { setSavedJobs } from '../../redux/slices/jobsSlice.js';
 const JobDetails = () => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.auth)
-  console.log(user)
   const { savedJobs } = useSelector(state => state.job)
 
   const [hasApplied, setHasApplied] = useState(false);
@@ -112,7 +111,7 @@ const JobDetails = () => {
         </div>
         <div>
           <h2 className="font-semibold text-gray-900">Salary</h2>
-          <p>{job?.salary}</p>
+          <p>Rs.{job?.salary}</p>
         </div>
         <div>
           <h2 className="font-semibold text-gray-900">Requirements</h2>
