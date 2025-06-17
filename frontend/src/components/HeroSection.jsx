@@ -20,7 +20,7 @@ const HeroSection = () => {
         </div>
 
         <div className="border md:w-[30vw] h-[8vh] rounded-md flex items-center justify-center">
-          <input className='text-slate-600 px-5 w-[80%] h-full outline-none' type="text" name="" id="" placeholder='Search for a job' autoFocus />
+          <input className='text-slate-600 px-5 w-[80%] h-full outline-none' type="text" name="" id="" placeholder='Search for a job' />
           <CiSearch className='h-full w-[20%] hover:bg-blue-500 hover:text-white duration-200 cursor-pointer' />
         </div>
       </div>

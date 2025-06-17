@@ -19,7 +19,8 @@ app.use(cookieParser())
 
 app.use(cors(
   {
-    origin: 'http://localhost:5173',
+    //  origin: 'http://localhost:5173',
+    origin: ['http://192.168.1.34:5173', 'http://localhost:5173'],
     credentials: true,
     // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     // allowedHeaders: ['Content-Type', 'Authorization']
@@ -39,6 +40,6 @@ app.use("/api/v1/application", applicationRouter)
 
 
 const port = process.env.PORT || 4000;
-app.listen(port, () => {
+app.listen(port,  () => {
   console.log(`server running at http://localhost:${port}`)
 })

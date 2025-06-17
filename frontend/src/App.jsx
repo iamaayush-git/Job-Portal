@@ -49,6 +49,7 @@ const App = () => {
     }
   }
 
+  console.log(import.meta.env.VITE_BACKEND_URL)
   const getAllJobs = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-all-jobs");

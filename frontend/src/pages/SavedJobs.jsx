@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSavedJobs } from '../../redux/slices/jobsSlice';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const SavedJobs = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,26 @@ const SavedJobs = () => {
     }
   };
 
-  return (
+
+  const getSavedJobs = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-saved-jobs", {
+        withCredentials: true
+      });
+      if (response.data.success === true) {
+        dispatch(setSavedJobs(response?.data.savedJobs))
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data.message)
+    }
+  }
+
+  useEffect(() => {
+    getSavedJobs()
+  }, [])
+
+  return savedJobs ? (
     <div className="min-h-screen max-w-4xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Saved Jobs</h2>
       {savedJobs.length === 0 ? (
@@ -58,7 +78,7 @@ const SavedJobs = () => {
         </ul>
       )}
     </div>
-  );
+  ) : (<span>Loading...</span>)
 };
 
 export default SavedJobs;

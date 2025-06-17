@@ -94,7 +94,7 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
   {
     return editProfile ? (
       <>
-        <div className='py-10 absolute flex justify-center inset-0 bg-gray-200 bg-opacity-50 rounded-md '>
+        <div className=' bg-gradient-to-r from-blue-50 to-white min-h-screen py-10 absolute flex justify-center inset-0 bg-opacity-50 rounded-md '>
           <form className='overflow-y-scroll m-h-screen  rounded-md shadow-xl p-5 flex flex-col gap-5 w-[80vw] md:w-[30vw] ' action="">
 
             <label htmlFor='profile' >
