@@ -3,6 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
+
   return (
     <section className="py-10 rounded-md">
       <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
