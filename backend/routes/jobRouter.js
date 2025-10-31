@@ -1,5 +1,5 @@
 import express from "express"
-import { deleteJob, getAdminJobs, getAllJobs, getJobById, getSavedJobs, postJob, removeSavedJobs, saveJob } from "../controllers/jobController.js";
+import { deleteJob, getAdminJobs, getAllJobs, getJobById, getSavedJobs, postJob, removeSavedJobs, saveJob, getRecommendedJobs } from "../controllers/jobController.js";
 import isAuthenticate from "../middlewares/isAuthenticate.js";
 
 const jobRouter = express.Router();
@@ -12,6 +12,6 @@ jobRouter.get("/get-admin-jobs", isAuthenticate, getAdminJobs);
 jobRouter.get("/save-job/:id", isAuthenticate, saveJob);
 jobRouter.get("/remove-saved-job/:id", isAuthenticate, removeSavedJobs);
 jobRouter.get("/get-saved-jobs", isAuthenticate, getSavedJobs);
-
+jobRouter.get("/get-recommended-jobs", isAuthenticate, getRecommendedJobs);
 
 export default jobRouter

@@ -2,6 +2,7 @@ import { Application } from "../models/applicationModel.js";
 import { Company } from "../models/companyModel.js";
 import { Job } from "../models/jobModel.js";
 import { User } from "../models/userModel.js";
+import { embedJob, recommendJobs } from "../utils/aiService.js";
 
 const postJob = async (req, res) => {
   try {
@@ -39,7 +40,7 @@ const postJob = async (req, res) => {
       company: companyId,
       created_by: userId
     })
-
+    const embedJobData = await embedJob(job)
     res.status(201).json({
       success: true,
       message: "Job created successfully",
@@ -47,7 +48,6 @@ const postJob = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error)
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -86,7 +86,6 @@ const deleteJob = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -120,7 +119,6 @@ const getAllJobs = async (req, res) => {
 
 
   } catch (error) {
-    console.log(error)
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -146,7 +144,6 @@ const getJobById = async (req, res) => {
       job
     })
   } catch (error) {
-    console.log(error)
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -172,7 +169,6 @@ const getAdminJobs = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error)
     return res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -227,7 +223,6 @@ const saveJob = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -259,7 +254,6 @@ const getSavedJobs = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -304,7 +298,6 @@ const removeSavedJobs = async (req, res) => {
 
 
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error"
@@ -312,5 +305,45 @@ const removeSavedJobs = async (req, res) => {
   }
 }
 
+const getRecommendedJobs = async (req, res) => {
+  try {
+    const userId = req.user.userId
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
 
-export { postJob, getAllJobs, getJobById, getAdminJobs, saveJob, removeSavedJobs, getSavedJobs, deleteJob }
+    const resumeUrl = user.profile.resume
+    const suggestedJobs = await recommendJobs(resumeUrl, 5)
+
+    const jobIds = suggestedJobs.map(job => job.job_id).filter(Boolean)
+
+    if (!jobIds || jobIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Recommended jobs",
+        recommendedJobs: []
+      })
+    }
+    const recommendedJobs = await Job.find({ _id: { $in: jobIds } })
+
+    return res.status(200).json({
+      success: true,
+      message: "Recommended jobs",
+      recommendedJobs
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    })
+  }
+}
+
+
+
+export { postJob, getAllJobs, getJobById, getAdminJobs, saveJob, removeSavedJobs, getSavedJobs, deleteJob, getRecommendedJobs }
