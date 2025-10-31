@@ -351,3 +351,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+/ai_features/faiss_index/

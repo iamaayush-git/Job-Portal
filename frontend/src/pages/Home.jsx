@@ -2,6 +2,7 @@ import React from 'react'
 import HeroSection from '../components/HeroSection'
 import Carousel from '../components/Carousel'
 import LatestJobs from '../components/LatestJobs'
+import RecommendedJobs from './RecommendedJobs'
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       <HeroSection />
       <Carousel />
       <LatestJobs />
+      <RecommendedJobs />
     </div>
   )
 }

@@ -21,7 +21,6 @@ const UpdateCompanyForm = ({ company, setUpdateForm }) => {
 
 
   const handleChange = (e) => {
-    console.log(formValue)
     setFormValue(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
   const handleImageChange = (e) => {

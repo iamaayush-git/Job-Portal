@@ -9,7 +9,6 @@ const AddJobs = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.loading);
   const id = useParams().id;
-  console.log(id)
   const [formData, setFormData] = useState({
     title: '',
     description: '',

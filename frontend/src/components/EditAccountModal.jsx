@@ -19,8 +19,6 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
     resume: ""
   })
 
-  console.log(inputData.bio)
-
   useEffect(() => {
     setShowTempFile({
       photo: user?.profile.photo,
@@ -83,7 +81,6 @@ const EditAccountModal = ({ editProfile, setEditProfile }) => {
 
   const fileHandler = (e) => {
     const file = e.target.files[0];
-    console.log(file)
     if (file) {
       const fileUrl = URL.createObjectURL(file);
       setShowTempFile((prev) => ({ ...prev, photo: fileUrl }))

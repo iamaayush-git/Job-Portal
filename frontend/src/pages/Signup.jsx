@@ -23,7 +23,6 @@ const Signup = () => {
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    console.log(import.meta.env.VITE_BACKEND_URL)
   }
 
   const handleSubmit = async (e) => {

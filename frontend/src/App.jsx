@@ -7,7 +7,7 @@ import Signup from './pages/Signup.jsx'
 import Jobs from './pages/Jobs.jsx'
 import Profile from './pages/Profile.jsx'
 import { useDispatch, useSelector } from 'react-redux'
-import { setJobs, setSavedJobs } from "../redux/slices/jobsSlice.js"
+import { setJobs, setSavedJobs, setRecommendedJobs } from "../redux/slices/jobsSlice.js"
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { setUser } from '../redux/slices/authSlice.js'
@@ -34,6 +34,10 @@ const App = () => {
     getAllJobs();
   }, [])
 
+  useEffect(() => {
+    getRecommendedJobs()
+  }, [user])
+
   const checkAuth = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/user/check-auth", { withCredentials: true })
@@ -49,7 +53,6 @@ const App = () => {
     }
   }
 
-  console.log(import.meta.env.VITE_BACKEND_URL)
   const getAllJobs = async () => {
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-all-jobs");
@@ -76,6 +79,19 @@ const App = () => {
     }
   }
 
+  const getRecommendedJobs = async () => {
+    try {
+      const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/get-recommended-jobs", {
+        withCredentials: true
+      })
+      if (response.data.success === true) {
+        dispatch(setRecommendedJobs(response?.data.recommendedJobs))
+      }
+
+    } catch (error) {
+      toast.error(error.response?.data.message)
+    }
+  }
 
   return (
     <>

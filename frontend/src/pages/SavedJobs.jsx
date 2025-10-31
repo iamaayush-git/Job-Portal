@@ -16,7 +16,6 @@ const SavedJobs = () => {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/job/remove-saved-job/" + id, {
         withCredentials: true
       })
-      console.log(response)
       if (response.data.success === true) {
         dispatch(setSavedJobs(response.data.savedJobs))
         toast.success(response.data.message);

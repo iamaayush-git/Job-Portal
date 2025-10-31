@@ -16,13 +16,10 @@ const Applicants = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { loading } = useSelector(state => state.loading)
-
-  console.log(applicants)
   const getApplicant = async () => {
     dispatch(setLoading(true))
     try {
       const response = await axios.get(import.meta.env.VITE_BACKEND_URL + "/application/get-applicants/" + id, { withCredentials: true })
-      console.log(response)
       if (response.data.success === true) {
         setApplicants(response.data.applicants)
       }
@@ -45,11 +42,7 @@ const Applicants = () => {
       console.log(error)
       toast.error(error?.response?.data?.message)
     }
-    console.log(e.target.value)
   }
-
-  console.log(applicants)
-
 
   useEffect(() => {
     getApplicant();

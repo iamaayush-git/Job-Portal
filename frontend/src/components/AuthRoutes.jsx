@@ -9,7 +9,6 @@ export const ProtectedRoute = () => {
 
 export const PublicRoute = () => {
   const { isLoggedIn } = useSelector(state => state.auth)
-  console.log(isLoggedIn)
   if (isLoggedIn) {
     return <Navigate to={"/"} replace />
   }

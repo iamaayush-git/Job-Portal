@@ -11,7 +11,6 @@ const RegisterCompany = () => {
       if (response.data.success === true) {
         toast.success(response.data.message)
       }
-      console.log(response)
     } catch (error) {
       toast.error(error.response.data.message)
     }
