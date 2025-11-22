@@ -9,7 +9,7 @@ const AboutUs = () => {
           About Us
         </h1>
         <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl">
-          We connect talented professionals with their dream jobs and empower companies to build outstanding teams.
+         Hello, new deployment. We connect talented professionals with their dream jobs and empower companies to build outstanding teams.
         </p>
       </section>
 

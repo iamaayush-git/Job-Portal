@@ -353,4 +353,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 /ai_features/faiss_index/
-/ai_features/temp_resume.pdf/
+/ai_features/temp_resume.pdf
