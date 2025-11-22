@@ -352,5 +352,5 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-/ai_features/faiss_index/
+# /ai_features/faiss_index/
 /ai_features/temp_resume.pdf
