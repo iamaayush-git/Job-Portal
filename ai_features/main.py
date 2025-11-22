@@ -15,6 +15,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:3000",
+    "https://job-portal-x5ts.onrender.com"
 ]
 
 app.add_middleware(
