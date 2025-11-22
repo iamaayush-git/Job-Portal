@@ -19,7 +19,7 @@ app.use(cookieParser())
 
 app.use(cors(
   {
-    origin: 'https://job-portal-swart-zeta-49.vercel.app',
+    origin: ['http://192.168.1.34:5173', 'http://localhost:5173', 'https://job-portal-swart-zeta-49.vercel.app'],
     credentials: true,
   }
 ));

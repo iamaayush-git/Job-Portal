@@ -93,7 +93,12 @@ const login = async (req, res) => {
       profile: user.profile,
     }
 
-    res.status(200).cookie("token", token).json({
+    res.status(200).cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24
+    }).json({
       message: "Login successful",
       user,
       success: true
