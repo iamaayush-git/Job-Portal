@@ -53,7 +53,7 @@ const Login = () => {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email"
@@ -113,7 +113,7 @@ const Login = () => {
         }
 
 
-        <p>Have an account? <Link className='text-blue-500 hover:text-blue-700' to={"/signup"}>Signup</Link> </p>
+        <p>Don't have an account? <Link className='text-blue-500 hover:text-blue-700' to={"/signup"}>Signup</Link> </p>
       </form>
     </div>
   )
